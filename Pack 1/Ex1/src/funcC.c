@@ -1,7 +1,6 @@
 #include "../include/functions.h"
 #include <ctype.h>
 #include <math.h>
-#include <stdio.h>
 
 int isHex(char a){
     int flag = 0;
@@ -16,15 +15,15 @@ int isHex(char a){
     return flag;
 }
 
-void funcC(long int x){
+ReturnCode funcC(long int x, char * hex){
     if (x == 0){
-        printf("%ld", x);
-        return;
+        *hex = '0';
+        *(hex + 1) = '\0';
+        return OK;
     }
 
     int size = log10(x) + 2;
-    char num[size];
-    char * p = num + size - 1;
+    char * p = hex + size - 1;
     *p = '\0';
     p--;
 
@@ -38,13 +37,12 @@ void funcC(long int x){
         x /= 16;
         p--;
     }
-
-    char * beg = num;
-    while (*beg != '\0'){
-        if (isHex(*beg)){
-        printf("%c", *beg);
-    } 
-    ++beg;
-    }
+    // char * beg = num;
+    // while (*beg != '\0'){
+    //     if (isHex(*beg)){
+    //     printf("%c", *beg);
+    // } 
+    // ++beg;
+    return OK;
     
 }

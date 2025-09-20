@@ -1,21 +1,22 @@
 #include "../include/functions.h"
-#include <stdio.h>
 
 
-void funcA(long int x){
+ReturnCode funcA(long int x, int *p){ //массив нужен блять!!! сука!!!!!
 
     if (x == 0){
-        printf("Division by zero\n");
-        return; 
+        return DIVISION_BY_ZERO; 
     }
     int num = 1;
 
     int res = x * num;
 
     while (res <= 100) { 
-        printf("%d ", res);
+        *p = res;
         ++num;
+        ++p;
         res = x * num;
     }
+    *p = '\0';
+    return OK;
 // кратное число есть всегда - это само число
 }

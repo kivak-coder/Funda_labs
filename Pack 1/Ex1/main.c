@@ -1,5 +1,5 @@
+#include <math.h>
 #include <stdio.h>
-#include <ctype.h>
 #include "include/functions.h"
 
 
@@ -12,38 +12,61 @@ int main(int argc, char * argv[]){
 
     char flag;
     long int x = 0;
-    
-    for (int i = 1; i < argc; ++i){
-
-
-        char * p = argv[i]; // pointer to the beggining of the arg
-        if ((*p == '-') || (*p == '/')){
-            ++p;
-            flag = *p;
-            printf("Flag : %s\n", &flag);
-        }
-
-        if (isdigit(*p)){
-
-            while (*p){
-                x = 10 * x + (*p - '0');
-                ++p;
-            }
+    ReturnCode return_code;
+    return_code = parseArgs(argc, argv, &flag, &x);
+    if (return_code != OK){
+        if (return_code == WRONG_ORDER){
+            printf("Wrong order of arguments\n");
+        } 
+        if (return_code == WRONG_TYPE){
+            printf("Wrong type of argument\n");
         }
     }
+    
+    int isSimple = 1;
+    long long int res;
+    int n = log10(x) + 2;
+    char * hex[n];
+    long long int res1 = 0;
+    long long int powers[10][10];
+    int multiple[100];
 
 
+    
     switch (flag){
         case 'h':
-            funcA(x);
+            int *p = multiple;
+            return_code = funcA(x, p);
+            if (return_code == DIVISION_BY_ZERO){
+                printf("Division by zero\n");
+            } else {
+                int *p = multiple;
+                while (*p){
+                    printf("%d ", *p);
+                }
+            }
             break;
 
         case 'p':
-            funcB(x);
+            return_code = funcB(x, &isSimple);
+            switch (isSimple){
+                case -1:
+                    printf("Number %ld is not composite and not simple\n", x);
+                    break;
+                
+                case 0:
+                    printf("Number %ld is composite\n", x);
+                    break;
+                
+                case 1:
+                    printf("Number %ld is simple\n", x);
+                    break;    
+            }
             break;
         
         case 's':
-            funcC(x);
+            return_code = funcC(x, *hex);
+            printf("%s", *hex);
             break;
         
         case 'e':
@@ -52,18 +75,26 @@ int main(int argc, char * argv[]){
             } else if (x == 0) {
                 printf("0 is not acceptable\n");
             } else {
-                funcD(x);
+                funcD(x, &powers);
             }  
             break;
 
         case 'a':
-            funcE(x);
+            return_code = funcE(x, &res1);
             break;
         
         case 'f':
-            funcF(x);
-            break;
+            return_code = funcF(x, &res);
 
+            if (return_code == OK){
+                printf("%lld", res);
+                break;
+            } 
+            if (return_code == OVERFLOW){
+                printf("Too big input for factorial\n");
+                break;
+            }
+           
         default:
             printf("Wrong flag!");
     }

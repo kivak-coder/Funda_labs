@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 
-void funcD(long int x){
+ReturnCode funcD(long int x, long long int ** powers){
     int Maxbase = 10;
     long long int res = 1;
     
@@ -17,7 +17,9 @@ void funcD(long int x){
         for (int i = 1; i <= x; ++i){
             res = pow(a, i);
             printf("%12lld ", res);
+            powers[i][a] = res;
         }
         printf("\n");
     }
+    return OK;
 }
