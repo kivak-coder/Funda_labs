@@ -22,7 +22,7 @@ ReturnCode funcC(long int x, char * hex){
         return OK;
     }
 
-    int size = log10(x) + 2;
+    int size = log10(x) / log10(16) + 2;
     char * p = hex + size - 1;
     *p = '\0';
     p--;
@@ -37,12 +37,6 @@ ReturnCode funcC(long int x, char * hex){
         x /= 16;
         p--;
     }
-    // char * beg = num;
-    // while (*beg != '\0'){
-    //     if (isHex(*beg)){
-    //     printf("%c", *beg);
-    // } 
-    // ++beg;
     return OK;
     
 }

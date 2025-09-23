@@ -1,14 +1,14 @@
 #include "../include/functions.h"
 #include <limits.h>
-#include <stdio.h>
 
-ReturnCode funcF(long int x, unsigned long long int * res){
+ReturnCode funcF(long int x, long long int * res){
 
-    for (size_t i = 1; i <= x; ++i){
-        if (*res * i >= ULLONG_MAX){
+    for (int i = 2; i <= x; ++i){
+        if ((*res) * i < 0){
             return OVERFLOW; 
+        } else {
+            *res *= i;
         }
-        *res *= i;
     }
     return OK;
 }

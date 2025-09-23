@@ -1,7 +1,7 @@
 all: main
 
-main: main.o funcA.o funcB.o funcC.o funcD.o funcE.o funcF.o
-	gcc -o main main.o funcA.o funcB.o funcC.o funcD.o funcE.o funcF.o -lm
+main: main.o funcA.o funcB.o funcC.o funcD.o funcE.o funcF.o parseArgs.o
+	gcc -o main main.o funcA.o funcB.o funcC.o funcD.o funcE.o funcF.o parseArgs.o -lm
 
 main.o: main.c
 	gcc -c main.c -I include/
@@ -23,6 +23,9 @@ funcE.o: src/funcE.c
 
 funcF.o: src/funcF.c
 	gcc -c src/funcF.c -I include/
+
+parseArgs.o: src/parseArgs.c
+	gcc -c src/parseArgs.c -I include/
 
 clean:
 	rm -f *.o main

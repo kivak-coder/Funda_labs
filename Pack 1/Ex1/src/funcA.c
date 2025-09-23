@@ -1,13 +1,17 @@
 #include "../include/functions.h"
 
 
-ReturnCode funcA(long int x, int *p){ //массив нужен блять!!! сука!!!!!
+ReturnCode funcA(long int x, int *p){ 
 
     if (x == 0){
         return DIVISION_BY_ZERO; 
     }
-    int num = 1;
 
+    if (x > 100){
+        return NO_DIVIDERS;
+    }
+    
+    int num = 1;
     int res = x * num;
 
     while (res <= 100) { 
@@ -18,5 +22,4 @@ ReturnCode funcA(long int x, int *p){ //массив нужен блять!!! с
     }
     *p = '\0';
     return OK;
-// кратное число есть всегда - это само число
 }
