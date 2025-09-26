@@ -12,8 +12,9 @@ void funcB(long int x){
     
     if (x % 2 == 0){
         simple = 0;
-    } else {
+        *isSimple = 0;
         
+    } else {
         for (int i = 3; i <= n; ++i){
         if ((x % i == 0) || (x % (x / i) == 0)){
             simple = 0;
