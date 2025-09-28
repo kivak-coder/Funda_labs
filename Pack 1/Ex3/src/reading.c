@@ -8,6 +8,12 @@ returnCode toNum(char *arg, double * res){
     double y = 0.0;
     int isDouble = 0;
     char * p = arg;
+    int underZero = 1;
+
+    if (arg[0] == '-'){
+        underZero = -1;
+        ++p;
+    }
 
     if (!isDouble){
         while (*p){
@@ -39,7 +45,7 @@ returnCode toNum(char *arg, double * res){
         }
 
     y = y / pow(10, n);
-    *res = x + y;
+    *res = (x + y) * underZero;
     } else {
         *res = x;
     }
@@ -47,12 +53,12 @@ returnCode toNum(char *arg, double * res){
 
 }
 
-returnCode flagsValidation(char *argv[1], char * flag){
+returnCode flagsValidation(char * arg, char * flag){
+    char * p = arg;
 
-        char * p = argv[1];
-        if ((*p == '-' || *p == '/')){
+    if ((*p == '-' || *p == '/')){
             *flag = *(p + 1);
-            printf("Flag: %c", *flag);
+
         switch (*flag){
             case 'm':
             case 'q':
