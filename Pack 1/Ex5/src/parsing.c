@@ -6,15 +6,13 @@
 ReturnCode flagsValidation(char *arg, char *flag, bool * IsFile){
     char * p = arg;
 
-    if (*p == '-' || *p == '/'){
+    if (*p == '-' || *p == '/') {
 
-        if (strlen(arg) == 2){
+        if (strlen(arg) == 2) {
             *flag = *(p + 1);
             *IsFile = false;
-        }
-
-        if (strlen(arg) == 3){
-            if (*(p + 1) == 'n'){
+        } else if (strlen(arg) == 3) {
+            if (*(p + 1) == 'n') {
                 *IsFile = true;
                 *flag = *(p + 2);
             } else {
@@ -23,10 +21,8 @@ ReturnCode flagsValidation(char *arg, char *flag, bool * IsFile){
         } else {
             return WRONG_FLAG;
         }
+    }
 
-
-
-        
     switch (*flag) {
         case 'd':
         case 'i':
@@ -41,13 +37,11 @@ ReturnCode flagsValidation(char *arg, char *flag, bool * IsFile){
 
 ReturnCode AddOut(char * filename, char * outFile) {
     char out[] = "out_";
-    if ((strlen(filename) + 4) >= BUFSIZ){
+    if ((strlen(filename) + 4) >= BUFSIZ) {
         return TOO_LONG;
     }
     
     strcpy(outFile, out);
     strcat(outFile, filename);
     return OK;
-    }
-
 }

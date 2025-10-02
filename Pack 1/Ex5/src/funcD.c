@@ -4,40 +4,33 @@
 
 
 void toHex(int DecHum, char * HexNum){
-    printf("ABOB");
-    char str[7];
-    char * p = str;
-    int len = 1;
-    *p = '\0';
-    ++p;
+
+    int len = 0;
 
     while (DecHum){
         int num = DecHum % 16;
-        ++len;
         if (num > 9){
-            *p = num - 10 + 'A';
+            HexNum[len] = num - 10 + 'A';
         } else {
-            *p = (*p - '0');
+            HexNum[len] = num + '0';
         }
+        ++len;
         DecHum /= 16;
     }
-    char * ptr = str;
-    char * ptrFin = HexNum;
-    ptr += len;
+    HexNum[len] = '\0';
+    --len;
 
-    while (ptr){
-        *ptrFin = *ptr;
-        ++ptrFin;
-        --ptr; 
+    for (int i = 0; i <= len / 2; ++i){
+        char tmp = HexNum[i];
+        HexNum[i] = HexNum[len - i];
+        HexNum[len - i] = tmp;
     }
 }
 
 ReturnCode funcD(FILE *fi, FILE *out){
-    printf("ABOB");
     char c;
     char num[7];
     while ((c = fgetc(fi)) != EOF){
-        printf("ABOB");
         if (!isdigit(c)){
             if (c == '\n' || c == ' ' || c == '\t'){
                 fputc(c, out);

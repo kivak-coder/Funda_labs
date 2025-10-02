@@ -11,8 +11,8 @@ ReturnCode funcC(FILE *fi, FILE *out){
     while (fgets(str, BUFSIZ, fi) != NULL){
         char * p = str;
         
-        while (*p != '\n'){
-            if (!isalpha(tolower(*p)) && !isdigit(tolower(*p)) && (tolower(*p)) != ' ' && (tolower(*p)) != '\t'){
+        while (*p != '\n' && *p != '\0'){
+            if (!isalpha(*p) && !isdigit(*p) && (*p) != ' ' && (*p) != '\t'){
                 ++count;
             }
             ++p;

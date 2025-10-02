@@ -12,4 +12,4 @@ ReturnCode funcA(FILE *fi, FILE * out){
         }
     }
     return OK;
-}
+} 

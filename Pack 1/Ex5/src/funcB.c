@@ -21,4 +21,4 @@ ReturnCode funcB(FILE *fi, FILE *out){
 
     }
     return OK;
-}
+} 

@@ -24,21 +24,35 @@ int main(int argc, char * argv[]){
         return 0;
     }
 
-    if (isFile){
+    if (strlen(argv[2]) < BUFSIZ){
         strcpy(inputFile, argv[2]);
-        strcpy(outputFile, argv[3]);
-        
+    } else {
+        printf("Too big input filename!\n");
+        return 0;
+    }
+
+    if (isFile && argc == 3){
+        printf("Miss output filename!\n");
+        return 0;
+    }
+
+    if (isFile){
+        if (strlen(argv[3]) < BUFSIZ) {
+            strcpy(outputFile, argv[3]);
+        } else {
+            printf("Too big output filename!\n");
+            return 0;
+        }
+
     } else {
         strcpy(inputFile, argv[2]);
         return_code = AddOut(inputFile, outputFile);
     }
 
     if (return_code == TOO_LONG){
-        printf("too long string!\n");
+        printf("Cannot add 'out_' to filename!\n");
+        return 0;
     }
- 
-
-    printf("Input: %s , output: %s", inputFile, outputFile);
 
     FILE * InFi = fopen(inputFile, "r");
     FILE * OutFi = fopen(outputFile, "w");
