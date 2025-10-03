@@ -1,9 +1,9 @@
 
-
 typedef enum ReturnCode {
     WRONG_TYPE,
     OVERFLOW,
     WRONG_NUM,
+    WRONG_BASE,
     OK
 } ReturnCode;
 

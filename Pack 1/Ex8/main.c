@@ -1,4 +1,5 @@
 #include "include/functions.h"
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -6,39 +7,61 @@
 int main(){
 
     int base = 0;
-    char str[100];
+    char str[BUFSIZ];
     char numS[10];
-    char maxS[10];
     long int max = 0;
     long int num = 0;
     long int numN = 0;
+    int underZero = 1;
+    ReturnCode returnCode;
 
     printf("Enter the base of the numeral sistem:");
-    // scanf("%s", str);
-    scanf("%d", &base);
+    scanf("%s", str);
+    returnCode = parseBase(str, &base);
 
+    if (returnCode == WRONG_TYPE) {
+        printf("Wrong symbols in base detected!\n");
+        return 0;
+    }
+    if (returnCode == WRONG_BASE) {
+        printf("Your base should be in [2...36]!\n");
+        return 0;
+    } 
+    if (returnCode == OVERFLOW) {
+        printf("Too big input. Overflow!\n");
+    }
+    
     printf("Enter your number:");
     scanf("%s", str);
+
     while (strcmp(str, "Stop") != 0){
-    
+        returnCode = parseNum(str, &base);
+        if (returnCode == WRONG_NUM) {
+            printf("Number in this numeric system should not contain such digits!\n");
+            return 0;;
+        }
+        if (returnCode == WRONG_TYPE) {
+            printf("Wrong type symbols detected in number!\n");
+            return 0;;
+        }
+        
         toDecInt(str, base, &num);
         printf("%ld\n", num);
-        if (num > max){
+        num *= underZero;
+        if (labs(num) > labs(max)) {
             max = num;
-            strcpy(maxS, str);
+            // strcpy(maxS, str);
         }
         num = 0;  
         printf("Enter your number:");
         scanf("%s", str);      
     }
 
-    printf("%s\n", maxS);
-    // printf("%ld\n", max);
-    numN = max;
+    printf("%ld\n", max);
     for (int i = 9; i <= 36; i += 9){
-        printf("%d\n", i);
-        toNsistem(maxS, i, &numN);
-        printf("%d-base: %s", i, maxS);
+        char maxS[BUFSIZ];
+        toNsistem(maxS, i, &max);
+        printf("%d-base: %s\n", i, maxS);
     }
     return 0;
 
