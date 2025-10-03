@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 
-int main(){
+int main() {
 
     int base = 0;
     char str[BUFSIZ];
@@ -34,8 +34,8 @@ int main(){
     printf("Enter your number:");
     scanf("%s", str);
 
-    while (strcmp(str, "Stop") != 0){
-        returnCode = parseNum(str, &base);
+    while (strcmp(str, "Stop") != 0) {
+        returnCode = parseNum(str, &base, &underZero);
         if (returnCode == WRONG_NUM) {
             printf("Number in this numeric system should not contain such digits!\n");
             return 0;;
@@ -46,19 +46,15 @@ int main(){
         }
         
         toDecInt(str, base, &num);
-        printf("%ld\n", num);
-        num *= underZero;
         if (labs(num) > labs(max)) {
             max = num;
-            // strcpy(maxS, str);
         }
         num = 0;  
         printf("Enter your number:");
         scanf("%s", str);      
     }
-
-    printf("%ld\n", max);
-    for (int i = 9; i <= 36; i += 9){
+    printf("Max absolute number: %ld\n", max);
+    for (int i = 9; i <= 36; i += 9) {
         char maxS[BUFSIZ];
         toNsistem(maxS, i, &max);
         printf("%d-base: %s\n", i, maxS);

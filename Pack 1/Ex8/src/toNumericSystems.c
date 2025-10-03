@@ -2,20 +2,28 @@
 #include <ctype.h>
 #include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 ReturnCode toDecInt(char *str, const int base, long *num) {
     char * ptr = str;
-    while (*ptr){
+    int underZero = 1;
+    if (str[0] == '-') {
+        underZero = -1;
+        ++ptr;
+    }
+
+    while (*ptr) {
         if (isdigit(*ptr)) {
             if (*num > LLONG_MAX / base) {
                 return OVERFLOW; 
             }
             *num = (*num) * base + (*ptr - '0');
         } else {
-            *num = (*num) * base + (*ptr - 'A' + 10);
+            *num = (*num) * base + (toupper(*ptr) - 'A' + 10);
         }
         ++ptr;
     }
+    *num *= underZero;
     return OK;
 }
 
@@ -30,10 +38,10 @@ ReturnCode toNsistem(char *str, const int base, long *num) {
 
     if (*num < 0) {
         str[0] = '-';
-        ++len;   // а не возникнет ли тут проблемы при перевороте?
-    }   
+        ++len;  
+    }
 
-    long tempNum = *num;
+    long tempNum = labs(*num);
     while (tempNum) {
         if (len > BUFSIZ - 1) {
             return OVERFLOW;
@@ -51,6 +59,9 @@ ReturnCode toNsistem(char *str, const int base, long *num) {
     --len;
 
     for (int i = 0; i <= len / 2; ++i) {
+        if (str[i] == '-') {
+            continue;
+        }
         char tmp = str[i];
         str[i] = str[len - i];
         str[len - i] = tmp;

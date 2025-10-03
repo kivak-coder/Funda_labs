@@ -11,4 +11,4 @@ typedef enum ReturnCode {
 ReturnCode toNsistem(char * str, const int base, long int * num);
 ReturnCode toDecInt(char * str, const int base, long int * num);
 ReturnCode parseBase(char * str, int * base);
-ReturnCode parseNum(char * str, const int * base);
+ReturnCode parseNum(char * str, const int * base, int * underZero);
