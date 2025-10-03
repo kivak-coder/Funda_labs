@@ -3,11 +3,11 @@
 #include <stdio.h>
 
 
-void toHex(int DecHum, char * HexNum){
+void toHex(int DecHum, char * HexNum) {
 
     int len = 0;
 
-    while (DecHum){
+    while (DecHum) {
         int num = DecHum % 16;
         if (num > 9){
             HexNum[len] = num - 10 + 'A';
@@ -20,19 +20,19 @@ void toHex(int DecHum, char * HexNum){
     HexNum[len] = '\0';
     --len;
 
-    for (int i = 0; i <= len / 2; ++i){
+    for (int i = 0; i <= len / 2; ++i) {
         char tmp = HexNum[i];
         HexNum[i] = HexNum[len - i];
         HexNum[len - i] = tmp;
     }
 }
 
-ReturnCode funcD(FILE *fi, FILE *out){
+ReturnCode funcD(FILE *fi, FILE *out) {
     char c;
     char num[7];
-    while ((c = fgetc(fi)) != EOF){
+    while ((c = fgetc(fi)) != EOF) {
         if (!isdigit(c)){
-            if (c == '\n' || c == ' ' || c == '\t'){
+            if (c == '\n' || c == ' ' || c == '\t') {
                 fputc(c, out);
             } else {
                 toHex((int)c, num);

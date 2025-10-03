@@ -2,9 +2,9 @@
 #include <ctype.h>
 #include <stdio.h>
 
-ReturnCode funcA(FILE *fi, FILE * out){
+ReturnCode funcA(FILE *fi, FILE * out) {
     char c;
-    while ((c = fgetc(fi)) != EOF){
+    while ((c = fgetc(fi)) != EOF) {
         if (!isdigit(c)){
             fputc(c, out);
         } else {
