@@ -10,7 +10,7 @@ ReturnCode FindMinSys(char *str, int *base) {
             digit = *p - '0';
         }
         if (isalpha(*p)) {
-            digit = *p - 'A' + 10;
+            digit = toupper(*p) - 'A' + 10;
         }
         
         if (digit > *base) {

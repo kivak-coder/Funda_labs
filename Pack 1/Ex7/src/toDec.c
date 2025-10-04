@@ -4,21 +4,20 @@
 
 ReturnCode toDec(long int *num, char *str, const int *base){
     char * p = str;
-
     while (*p) { 
-        if (*num > LLONG_MAX / *base) {
+        if (*num >= LONG_MAX / *base) {
             return OVERFLOW;
         }
         if (isdigit(*p)) {
             *num = *num * (*base) + (*p - '0');
         }
         if (isalpha(*p)) {
-            *num = *num * (*base) + (*p - 'A' + 10);
-        } 
-        else {
-            return WRONG_SYMBOL;
+            *num = *num * (*base) + (toupper(*p) - 'A' + 10);
         }
         ++p;
+    }
+    if (str[0] == '-') {
+        *num *= (-1);
     }
     return OK;
 }
