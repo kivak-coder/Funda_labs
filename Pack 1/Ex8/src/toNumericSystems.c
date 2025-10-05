@@ -4,8 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-ReturnCode toDecInt(char *str, const int base, long *num) {
-    char * ptr = str;
+ReturnCode toDecInt(char const * str, int base, long *num) {
+    if (str == NULL || num == NULL) {
+        return NULL_POINTER;
+    }
+    if (base <= 0) {
+        return WRONG_BASE;
+    }
+    const char * ptr = str;
     int underZero = 1;
     if (str[0] == '-') {
         underZero = -1;
@@ -27,21 +33,24 @@ ReturnCode toDecInt(char *str, const int base, long *num) {
     return OK;
 }
 
-ReturnCode toNsistem(char *str, const int base, long *num) {
+ReturnCode toNsistem(char *str, const int base, long num) {
+    if (str == NULL) {
+        return NULL_POINTER;
+    }
     int digit = 0;
     int len = 0;
-    if (*num == 0) {
+    if (num == 0) {
         str[0] = '0';
         str[1] = '\0';
         return OK;
     }
 
-    if (*num < 0) {
+    if (num < 0) {
         str[0] = '-';
         ++len;  
     }
 
-    long tempNum = labs(*num);
+    long tempNum = labs(num);
     while (tempNum) {
         if (len > BUFSIZ - 1) {
             return OVERFLOW;

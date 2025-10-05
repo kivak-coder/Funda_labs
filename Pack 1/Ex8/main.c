@@ -38,11 +38,11 @@ int main() {
         returnCode = parseNum(str, &base, &underZero);
         if (returnCode == WRONG_NUM) {
             printf("Number in this numeric system should not contain such digits!\n");
-            return 0;;
+            return 0;
         }
         if (returnCode == WRONG_TYPE) {
             printf("Wrong type symbols detected in number!\n");
-            return 0;;
+            return 0;
         }
         
         toDecInt(str, base, &num);
@@ -56,7 +56,7 @@ int main() {
     printf("Max absolute number: %ld\n", max);
     for (int i = 9; i <= 36; i += 9) {
         char maxS[BUFSIZ];
-        toNsistem(maxS, i, &max);
+        toNsistem(maxS, i, max);
         printf("%d-base: %s\n", i, maxS);
     }
     return 0;
