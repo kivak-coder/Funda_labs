@@ -3,6 +3,28 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+
+
+ReturnCode withoutZeros(char ** p, bool * isNum) {
+    if (isalnum(**p) && **p != '0') {
+        *isNum = true;
+        return OK;
+    }
+
+    while (**p == '0') {
+        ++*p;
+        if (isalnum(**p) && **p != '0') {
+            *isNum = true;
+            return OK;
+        }
+        if (!isalnum(**p)) {
+            *isNum = false;
+            return OK;
+        }
+    }
+    return OK;
+}
+
 ReturnCode parseString(char *str, FILE * OutFi) {
     int base = 1;
     char * p = str;
@@ -16,19 +38,23 @@ ReturnCode parseString(char *str, FILE * OutFi) {
         if (*p == '-' && ptr == num && isalnum(*(p + 1))) {
             *ptr = '-';
             ++ptr;
-        }   
+            ++p;
+        }  
 
-        if (isalnum(*p)) {
-            if (!isNum) {
-                if (*p == '0' && !isalnum(*(p + 1))) {
-                    *ptr = '0';
-                } 
-                if (*p == '0' && *(p + 1) == '0') {
-                    ++ptr;
-                }
-                if (*p == '0' && isalnum(*(p + 1))) {
-                    isNum = true;
-                }
+        if (ptr == num || num[0] == '-') {
+            withoutZeros(&p, &isNum);
+        }
+
+        if (isNum) {
+            if (isalnum(*p) && *p != 0) {
+                *ptr = *p;
+                ++ptr;
+            }
+
+        } else {
+            if (isalnum(*(p - 1))) {
+                *ptr = '0';
+                ++ptr;
             }
         }
 
@@ -44,13 +70,12 @@ ReturnCode parseString(char *str, FILE * OutFi) {
                 fprintf(OutFi, "Number: %s, Min base: %d, Number in decimal system: %ld\n", num, base, numDec);
             }
 
-            base = 0;
+            base = 1;
             ptr = num;
             numDec = 0;
-            isNum = false;
         }
-
         ++p;
+
     }  while (*p != '\n' && *p != '\0');
 
     if (ptr != num) {
