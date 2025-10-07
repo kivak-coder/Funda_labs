@@ -32,3 +32,16 @@ Number: 0, Min base: 2, Number in decimal system: 0
 Number: -AFDfgd, Min base: 17, Number in decimal system: -15519874
 Number: gfhdh, Min base: 18, Number in decimal system: 1772855
 Number: hcdh56, Min base: 18, Number in decimal system: 33463788
+Number: ahahaha, Min base: 18, Number in decimal system: 373397356
+Number: -apapapa, Min base: 26, Number in decimal system: -3391208740
+Number: -8584584, Min base: 9, Number in decimal system: -4602658
+Number: GH, Min base: 18, Number in decimal system: 305
+Number: -h, Min base: 18, Number in decimal system: -17
+Number: 109H08, Min base: 18, Number in decimal system: 1947572
+Number: 67, Min base: 8, Number in decimal system: 55
+Number: p, Min base: 26, Number in decimal system: 25
+Number: -p, Min base: 26, Number in decimal system: -25
+Number: 0, Min base: 2, Number in decimal system: 0
+Number: 0, Min base: 2, Number in decimal system: 0
+Number: 0, Min base: 2, Number in decimal system: 0
+Number: gh, Min base: 18, Number in decimal system: 305
