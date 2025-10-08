@@ -9,8 +9,8 @@ ReturnCode funcB(long int x, int *isSimple){
     
     if (x % 2 == 0){
         *isSimple = 0;
-    } else {
         
+    } else {
         for (int i = 3; i <= n; ++i){
         if ((x % i == 0) || (x % (x / i) == 0)){
             *isSimple = 0;
