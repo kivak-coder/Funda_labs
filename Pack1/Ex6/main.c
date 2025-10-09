@@ -19,6 +19,10 @@ int main (int argc, char ** argv) {
         printf("Epsilon must be positive!\n");
         return 0;
     }
+    if (eps < 1e-17) {
+        printf("too small epsilon!\n");
+        return 0;
+    }
 
     double a = 0;
     double b = 1;
