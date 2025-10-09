@@ -3,6 +3,10 @@
 #include <limits.h>
 
 ReturnCode toDec(long int *num, char *str, const int *base){
+    if (!num || !str || !base) {
+        return NULL_POINTER;
+    }
+    
     char * p = str;
     while (*p) { 
         if (*num >= LONG_MAX / *base) {

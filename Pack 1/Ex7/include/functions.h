@@ -4,6 +4,7 @@
 typedef enum ReturnCode {
     OVERFLOW,
     WRONG_SYMBOL,
+    NULL_POINTER,
     OK,
 } ReturnCode;
 

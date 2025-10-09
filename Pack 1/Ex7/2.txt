@@ -42,6 +42,8 @@ Number: 67, Min base: 8, Number in decimal system: 55
 Number: p, Min base: 26, Number in decimal system: 25
 Number: -p, Min base: 26, Number in decimal system: -25
 Number: 0, Min base: 2, Number in decimal system: 0
+Number: -gdepapa, Min base: 26, Number in decimal system: -5103954788
 Number: 0, Min base: 2, Number in decimal system: 0
 Number: 0, Min base: 2, Number in decimal system: 0
 Number: gh, Min base: 18, Number in decimal system: 305
+Number: -zzzzzzzzzzzzzzzz, Min base: 36, Number in decimal system: Overflow!

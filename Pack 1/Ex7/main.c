@@ -23,9 +23,14 @@ int main(int argc, char ** argv) {
 
     printf("HERE!\n");
     char str[BUFSIZ];
+    ReturnCode return_code;
 
     while (fgets(str, BUFSIZ, InFi) != NULL){
-        parseString(str, OutFi);
+        return_code = parseString(str, OutFi);
+        
+        if (return_code == NULL_POINTER) {
+            printf("Come across a null pointer!\n");
+        }
     }
 
     fclose(InFi);

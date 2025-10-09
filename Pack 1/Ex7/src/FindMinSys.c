@@ -2,6 +2,9 @@
 #include <ctype.h>
 
 ReturnCode FindMinSys(char *str, int *base) {
+    if (!str) {
+        return NULL_POINTER;
+    }
     char * p = str;
     int digit = 0;
 
