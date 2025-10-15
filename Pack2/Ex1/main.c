@@ -1,0 +1,31 @@
+#include "include/rewriteFiles.h"
+#include <stdio.h>
+
+
+int main () {
+    char InputFilename[256];
+    char outputFilename[256];
+    ReturnCode returnCode;
+
+    printf("Enter input file:\n");
+    scanf("%s", InputFilename);
+    FILE * InputFile = fopen(InputFilename, "r");
+
+    while (InputFile == NULL) {
+        printf("An error with opening input file! Enter right name.\n");
+    }
+
+    printf("Enter output file:\n");
+    scanf("%s", outputFilename);
+    FILE * OutputFile = fopen(outputFilename, "w");
+
+    while (OutputFile == NULL) {
+        printf("An error with opening output file! Enter right name.\n");
+    }
+    char string[BUFSIZ];
+    while (fgets(string, BUFSIZ, InputFile) != NULL) {
+        rewriteStrings(OutputFile, string);
+    }
+    return 0;
+
+}
