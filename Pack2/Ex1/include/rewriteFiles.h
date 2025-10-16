@@ -6,6 +6,6 @@ typedef enum ReturnCode {
 }ReturnCode;
 
 #define MAX_SIZE 80
-#define puctuationMarks ",.-:;!?"
+// #define puctuationMarks ",.-:;!?"
 
-ReturnCode rewriteStrings(FILE * Output, char * string);
+ReturnCode rewriteStrings(FILE * Output, char ** string);

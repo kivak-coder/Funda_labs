@@ -3,15 +3,21 @@
 #include <stdio.h>
 #include <string.h>
 
-ReturnCode rewriteStrings(FILE * Output, char * string) {
-    return OK;
+ReturnCode rewriteStrings(FILE * Output, char ** string) {
+    if (*string == NULL) {
+        return NULL;
+    }
     char * ptrCur = string;
     char * ptrPrev = NULL;
     char buf[BUFSIZ];
     int len = 0;
+    if (strlen(*string) < MAX_SIZE) {
+        fprintf(Output, "%s", *string);
+        return OK;
+    }
 
     while (*ptrCur) {
-        if (isalnum(*ptrCur) || strpbrk(string, puctuationMarks)) { // кто такие читаемые симфолы бля
+        if (isalnum(*ptrCur)) {
             *buf = *ptrCur;
             ++len;
         }
@@ -20,4 +26,5 @@ ReturnCode rewriteStrings(FILE * Output, char * string) {
             *buf = '\0';
         }
     }
+    return OK;
 }
