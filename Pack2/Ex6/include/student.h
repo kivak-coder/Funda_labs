@@ -1,8 +1,11 @@
+#define STUD_CAP 100
+#define SCORES_SIZE 5
+#define GROUP_CAP 15
 
 typedef struct Student {
     unsigned int id;
-    char name[100];
-    char surname[100];
-    char group[20];
-    unsigned char * scores[5];
-}Student;
+    char name[STUD_CAP];
+    char surname[STUD_CAP];
+    char group[GROUP_CAP];
+    unsigned char * scores[SCORES_SIZE];
+} Student;
