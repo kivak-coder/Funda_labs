@@ -94,7 +94,8 @@ int main(int argc, char ** argv) {
                 printf("Allocation mistake\n");
                 return 0;
             }
-            find(students, data , found, &capacity, 0, &capacity, type);
+            int sizeFound = 0;
+            find(students, data , found, &capacity, &sizeFound, &capacity, type);
             print(outputFile, found,&capacity);
         }
 

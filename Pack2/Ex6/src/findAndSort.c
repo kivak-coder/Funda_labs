@@ -6,16 +6,17 @@
 
 
 Returncode find(Student * students, const void * toFind, Student * found, int * sizeStuds, int * sizeFound, int * capacityFound, Type type) {
+    printf("%d", *sizeStuds);
     printf("ABOB\n");
-    if (students == NULL || toFind == NULL || found == NULL || sizeFound == NULL || capacityFound == NULL  || sizeStuds == NULL) {
-        return NULL_POINTER;
-    }
-    if (*sizeFound == 0 || *capacityFound == 0 || *sizeStuds == 0) {
-        return WRONG_STRUCT; // not great
-    }
+    // if (students == NULL || toFind == NULL || found == NULL || sizeFound == NULL || capacityFound == NULL  || sizeStuds == NULL) {
+    //     return NULL_POINTER;
+    // }
+    // if (*sizeFound == 0 || *capacityFound == 0 || *sizeStuds == 0) {
+    //     return WRONG_STRUCT; // not great
+    // }
     
-    for (size_t i = 0; i < *sizeStuds; ++i) {
-                printf("i-like: %zu\n", i);
+    for (int i = 0; i < *sizeStuds; ++i) {
+        printf("i-like: %d\n", i);
 
         
         if (*sizeFound == *capacityFound) {
@@ -37,6 +38,7 @@ Returncode find(Student * students, const void * toFind, Student * found, int * 
                 break;
             case NAME:
                 if (strcmp(students[i].name, (char*)toFind) == 0) {
+                    printf("Comapared!\n");
                     found[*sizeFound] = students[i];
                     (*sizeFound)++;
 
