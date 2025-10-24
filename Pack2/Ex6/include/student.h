@@ -7,5 +7,5 @@ typedef struct Student {
     char name[STUD_CAP];
     char surname[STUD_CAP];
     char group[GROUP_CAP];
-    unsigned char * scores[SCORES_SIZE];
+    unsigned char scores[SCORES_SIZE];
 } Student;
