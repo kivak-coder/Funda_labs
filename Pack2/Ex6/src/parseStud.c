@@ -14,7 +14,7 @@ Returncode parseNameSurname(char * name) {
     }
 
     char * ptr = name;
-    int isWrong = -1;
+    int isWrong = 0;
     while (*ptr) {
         if (!isalpha(*ptr)) {
             isWrong = 1;
@@ -23,7 +23,7 @@ Returncode parseNameSurname(char * name) {
         ++ptr;
     }
 
-    if (isWrong == 1) {
+    if (isWrong) {
         return WRONG_STRUCT;
     }
     return OK;

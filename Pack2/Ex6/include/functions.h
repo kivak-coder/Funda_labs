@@ -1,4 +1,5 @@
 #include "student.h"
+#include <linux/limits.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -17,7 +18,8 @@ typedef enum Type {
     GROUP
 } Type;
 
-#define EPS 1e15
+#define EPS 1e-15
+#define CAPACITY 10
 
 Returncode read(Student * students, FILE * file, int * size, int * capacity);
 Returncode find(Student * students, const void * toFind, Student ** found, int * sizeStuds, int * sizeFound, int * capacityFound, Type type, bool *isFound);

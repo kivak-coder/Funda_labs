@@ -1,6 +1,7 @@
 #include "../include/functions.h"
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 Returncode read(Student * students, FILE * inputFile, int * capacity, int * size) {
@@ -11,22 +12,32 @@ Returncode read(Student * students, FILE * inputFile, int * capacity, int * size
         *capacity = 1;
     }
     
-    char str[BUFSIZ];
     unsigned int id0 = 0;
-    int res = 0; int count = 0;
+    int res = 0; 
     char name0[STUD_CAP];
     char surname0[STUD_CAP];
     char group0[GROUP_CAP];
     unsigned char scores0[SCORES_SIZE] = {0};
     Returncode returnCode;
     
-    while (count < *capacity) {
-        res = fscanf(inputFile, "%d %s %s %s %c %c %c %c %c", &id0, name0, surname0, group0, &scores0[0], &scores0[1], &scores0[2], &scores0[3], &scores0[4]);
+
+    
+    res = fscanf(inputFile, "%d %s %s %s %c %c %c %c %c", &id0, name0, surname0, group0, &scores0[0], &scores0[1], &scores0[2], &scores0[3], &scores0[4]);
+    while (res != EOF) {
 
         if (res == EOF) {break;}
         if (res != 9) {return WRONG_STRUCT;}
 
         Student stud;
+
+        if (*size == *capacity) {
+            *capacity *= 2;
+            Student * tmp = (Student*)realloc(students, *capacity * sizeof(Student));
+            if (!tmp) {
+                return ERROR;
+            }
+            students = tmp;
+        }
         
         returnCode = parseId(&id0);
         if (returnCode == OK) {
@@ -71,10 +82,10 @@ Returncode read(Student * students, FILE * inputFile, int * capacity, int * size
             return WRONG_STRUCT;
         }
 
-        students[count] = stud;
-        count++;
+        students[*size] = stud;
+        (*size)++;
+        res = fscanf(inputFile, "%d %s %s %s %c %c %c %c %c", &id0, name0, surname0, group0, &scores0[0], &scores0[1], &scores0[2], &scores0[3], &scores0[4]);
     }
-    *size = count;
     return OK;
 
 }

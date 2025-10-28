@@ -1,4 +1,5 @@
 #include "include/functions.h"
+#include <linux/limits.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,62 +14,56 @@ int main(int argc, char ** argv) {
 
     char Input[FILENAME_MAX];    
     char Output[FILENAME_MAX];
+    FILE * inputFile;
+    FILE * outputFile;
+
 
     strcpy(Input, argv[1]);
     strcpy(Output, argv[2]);
 
-    FILE * inputFile = fopen(Input, "r");
+    inputFile = fopen(Input, "r");
     
     if (!inputFile) {
         printf("Error while opening an input file\n");
         return 0;
     }
-    FILE * outputFile = fopen(Output, "w");
+    outputFile = fopen(Output, "w");
     if (!outputFile) {
         printf("Error while opening an output file\n");
+        return 0;
     }
 
-    int capacityAll = 1; int capacityFound = 1; int capacityAv = 1;
+    int capacityAll = CAPACITY; int capacityFound = CAPACITY;
     int sizeAll = 0; int sizeFound = 0; int sizeAv = 0;
 
-    char userMsg[100]; // уберите сто!!!!!!!
-    char data[100];
+    char userMsg[MAX_INPUT]; 
+    char data[MAX_INPUT];
     Type type;
     bool isFound = false;
     Returncode returnCode;
     double avMax = 0.0;
 
-
-    capacityAll = 6;
-
-    // while (capacity <= 0) {
-    //     printf("Wrong capacity!\n");
-    //     scanf("%d", &capacity);
-    // }
-
     Student * students = (Student*)malloc(capacityAll * sizeof(Student));
 
     if (!students) {
-        printf("Some allocation mistake!\n");
+        printf("Some allocation error!\n");
         return 0;
     }
     
     returnCode = read(students, inputFile, &capacityAll, &sizeAll);
     printf("Size: %d\n", sizeAll);
     if (returnCode == WRONG_STRUCT) {
-        printf("Wrong struct mistake!\n");
+        printf("Wrong struct error!\n");
         return 0;
     }
     if (returnCode == NULL_POINTER) {
         printf("Come across a null pointer!\n");
         return 0;
     }
-    // print(outputFile, students, &sizeAll);
 
-    printf("Do you want to find someone? Enter STOP if you are done. Enter parameter to find at first.\n");
-    fgets(userMsg, 99, stdin); 
+    printf("Do you want to find someone? Enter STOP when you are done. Enter parameter to find at first.\n");
+    fgets(userMsg, MAX_INPUT - 1, stdin); 
     while (strcmp(userMsg, "STOP\n") != 0) { //
-        // fgets(userMsg, 99, stdin);
         returnCode = findType(userMsg,&type);
 
         if (returnCode != OK) {
@@ -77,7 +72,7 @@ int main(int argc, char ** argv) {
         }
 
         printf("Enter the data you want to find.\n");
-        fgets(data, 99, stdin);
+        fgets(data, MAX_INPUT, stdin);
 
         char * ptr = strchr(data, '\n');
         if (ptr) {
@@ -86,7 +81,15 @@ int main(int argc, char ** argv) {
 
         switch (type) {
             case ID:
-                returnCode = parseId(data);
+                char * endptr = NULL;
+                unsigned int id = strtol(data, &endptr, 10);
+                // if (endptr == (const char*)data) {
+                //     return WRONG_STRUCT; 
+                // }
+                // if (*endptr != '\0') {
+                //     return WRONG_STRUCT; 
+                // }
+                returnCode = parseId(&id);
                 break;
 
             case NAME:            
@@ -119,14 +122,14 @@ int main(int argc, char ** argv) {
                 printf("Could not find anyone\n");
             }
             printf("Do you want to find someone? Enter STOP if you are done. Enter parameter to find at first.\n");
-
+            fgets(userMsg, MAX_INPUT - 1, stdin); 
         }
-
     }
-    printf("Do you want to sort data? Enter the parameter (ID/NAME/SURNAME/GROUP). Enter STOP when you are done.\n");
 
-    while (strcmp(userMsg, "STOP") != 0) {
-        scanf("%s", userMsg);
+    printf("Do you want to sort data? Enter the parameter (ID/NAME/SURNAME/GROUP). Enter STOP if you are done.\n");
+    fgets(userMsg, MAX_INPUT - 1, stdin); 
+
+while (strcmp(userMsg, "STOP\n") != 0) {
         returnCode = findType(userMsg,&type);
 
         if (returnCode != OK) {
@@ -135,19 +138,25 @@ int main(int argc, char ** argv) {
         }
         returnCode = sort(students, &sizeAll, type);
         print(outputFile, students, &sizeAll);
+        printf("Do you want to sort data? Enter the parameter (ID/NAME/SURNAME/GROUP). Enter STOP if you are done.\n");
+        fgets(userMsg, MAX_INPUT - 1, stdin); 
+
     }
+
     char answer;
     printf("Do you want to print students with max average scores? (Y/N) \n");
     scanf("%c", &answer);
     if (answer == 'N') {
         printf("See yor result in a file!\n");
     } 
+
     if (answer == 'Y') {
         Student * avStuds = (Student *)malloc(sizeAll * sizeof(Student));
-        returnCode = average(students,&sizeAll, avStuds, &avMax, &sizeAv); // maybe double pointer??
+        returnCode = average(students,&sizeAll, avStuds, &avMax, &sizeAv); 
         print(outputFile, avStuds, &sizeAv);
+        printf("See yor result in a file!\n");
     }
-    // free(found); // а чо надо то писать??
+    
     free(students);
     fclose(inputFile);
     fclose(outputFile);

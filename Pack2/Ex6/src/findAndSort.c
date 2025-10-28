@@ -8,6 +8,8 @@
 Returncode find(Student * students, const void * toFind, Student ** found, int * sizeStuds, int * sizeFound, int * capacityFound, Type type, bool * isFound) {
     printf("%d", *sizeStuds);
     printf("ABOB\n");
+    long int id = 0;
+
 
     // if (students == NULL || toFind == NULL || found == NULL || sizeFound == NULL || capacityFound == NULL  || sizeStuds == NULL) {
     //     return NULL_POINTER;
@@ -20,7 +22,16 @@ Returncode find(Student * students, const void * toFind, Student ** found, int *
     if (*capacityFound == 0) {
         *capacityFound = 1; 
     }
-    memchr(toFind, '\n', 100);
+    if (type == ID) {
+        char * endptr;
+        id = strtol(toFind, (char**)toFind, 10);
+        if (endptr == (const char*)toFind) {
+            return WRONG_STRUCT; 
+        }
+        if (*endptr != '\0') {
+            return WRONG_STRUCT; 
+        }
+    }
 
     for (int i = 0; i < *sizeStuds; ++i) {
 
@@ -35,7 +46,7 @@ Returncode find(Student * students, const void * toFind, Student ** found, int *
 
         switch (type) {
             case ID:
-                if (students[i].id == *(unsigned int*)toFind) {
+                if (students[i].id == id) {
                     foundSmth = true;
                     *isFound = true;
                 }                  
@@ -60,33 +71,53 @@ Returncode find(Student * students, const void * toFind, Student ** found, int *
                 break;
         }
         if (foundSmth) {
-            *found[*sizeFound] = students[i];
+            (*found)[*sizeFound] = students[i];
             (*sizeFound)++;
+            foundSmth = false; 
         }
-
-        foundSmth = false; 
     }
+    
     return OK;
 }
 
 
-int compId(const void * id1, const void * id2) {
-    return (unsigned int*)id1 - (unsigned int*)id2;
+int compId(const void * student1, const void * student2) {
+    Student * stud1 = (Student*) student1;
+    Student * stud2 = (Student*) student2;
+    return ((stud1->id > stud2->id) - (stud1->id < stud2->id));
 }
 
-int compNameGroup(const void * string1, const void * string2) {
-    return strcmp((char*)string1, (char*)string2);
+int compName(const void * student1, const void * student2) {
+    Student * stud1 = (Student*) student1;
+    Student * stud2 = (Student*) student2;
+    return (strcmp(stud1->name, stud2->name));
+}
+int compSurname(const void * student1, const void * student2) {
+    Student * stud1 = (Student*) student1;
+    Student * stud2 = (Student*) student2;
+    return (strcmp(stud1->surname, stud2->surname));
+}
+
+int compGroup(const void * student1, const void * student2) {
+    Student * stud1 = (Student*) student1;
+    Student * stud2 = (Student*) student2;
+    return (strcmp(stud1->group, stud2->group));
 }
 
 Returncode sort(Student * students, int * sizeStud, Type type) {
     switch (type) {
         case NAME:
-        case SURNAME:
-        case GROUP:
-            qsort(students, (size_t)sizeStud, sizeof(Student), compNameGroup); // qsort returns nothing
+            qsort(students, *sizeStud, sizeof(Student), compName);
             break;
-        default:
-            qsort(students, (size_t)sizeStud, sizeof(Student),compId);
+        case SURNAME:
+            qsort(students, *sizeStud, sizeof(Student), compSurname);
+            break;
+        case GROUP:
+            qsort(students, *sizeStud, sizeof(Student), compGroup);
+            break;
+        case ID:
+            qsort(students, *sizeStud, sizeof(Student), compId);
+            break;
     }
     return OK;
 }

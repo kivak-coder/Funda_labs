@@ -1,18 +1,27 @@
 #include "../include/functions.h"
+#include <errno.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 
-Returncode print(FILE * file, Student * students, int * sizeStud) {
-    if (!students || !sizeStud) {
+Returncode print(FILE * file, Student * students, int * size) {
+    printf("ABOB\n");
+    printf("size: %i\n", *size);
+    if (!students || !size || !file) {
         return NULL_POINTER;
     }
     
-    for (int i = 0; i < *sizeStud; ++i) {
+    for (int i = 0; i < *size; ++i) {
         Student student = students[i];
-        fprintf(file, "id: %u\t name: %s\t surname: %s\t group: %s\t scores: ", student.id, student.name, student.surname, student.group);
+        int code = fprintf(file, "%u\t %s\t %s\t %s\t ", student.id, student.name, student.surname, student.group);
+        if (code < 0) {
+            printf("er: %s", strerror(errno));
+            printf("IRIRIRI\n");
+            return WRONG_STRUCT;
+        }
 
-        for (int i = 0; i < SCORES_SIZE; ++i) {
-            if (!fprintf(file, "%c ", student.scores[i])) {
+        for (int j = 0; j < SCORES_SIZE; ++j) {
+            if (!fprintf(file, "%c ", student.scores[j])) {
                 return WRONG_STRUCT;
             }
         }
