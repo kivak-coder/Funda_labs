@@ -1,7 +1,7 @@
 #include "../include/functions.h"
 #include <math.h>
 
-Returncode average(Student * students, int * sizeStuds, Student * foundStuds, double * avMax) {
+Returncode average(Student * students, int * sizeStuds, Student * foundStuds, double * avMax, int * sizeAv) {
     *avMax = 0.0;
     double av = 0.0;
     Student * ptr = foundStuds;
@@ -16,6 +16,7 @@ Returncode average(Student * students, int * sizeStuds, Student * foundStuds, do
             *avMax = av;
             ptr = &students[i];
             ++foundStuds;
+            ++(*sizeAv);
         }
     }
     return OK;

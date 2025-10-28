@@ -5,62 +5,67 @@
 #include <string.h>
 
 
-Returncode find(Student * students, const void * toFind, Student * found, int * sizeStuds, int * sizeFound, int * capacityFound, Type type) {
+Returncode find(Student * students, const void * toFind, Student ** found, int * sizeStuds, int * sizeFound, int * capacityFound, Type type, bool * isFound) {
     printf("%d", *sizeStuds);
     printf("ABOB\n");
+
     // if (students == NULL || toFind == NULL || found == NULL || sizeFound == NULL || capacityFound == NULL  || sizeStuds == NULL) {
     //     return NULL_POINTER;
     // }
     // if (*sizeFound == 0 || *capacityFound == 0 || *sizeStuds == 0) {
     //     return WRONG_STRUCT; // not great
     // }
-    
-    for (int i = 0; i < *sizeStuds; ++i) {
-        printf("i-like: %d\n", i);
 
-        
+    bool foundSmth = false;
+    if (*capacityFound == 0) {
+        *capacityFound = 1; 
+    }
+    memchr(toFind, '\n', 100);
+
+    for (int i = 0; i < *sizeStuds; ++i) {
+
         if (*sizeFound == *capacityFound) {
             *capacityFound *= 2;
-            Student * tmp = (Student*)realloc(found, *capacityFound * sizeof(Student));
+            Student * tmp = (Student*)realloc(*found, *capacityFound * sizeof(Student));
             if (!tmp) {
                 return NULL_POINTER;
             }
-            found = tmp;
+            *found = tmp;
         }
 
         switch (type) {
             case ID:
                 if (students[i].id == *(unsigned int*)toFind) {
-                    found[*sizeFound] = students[i];
-                    (*sizeFound)++;
-  
+                    foundSmth = true;
+                    *isFound = true;
                 }                  
                 break;
             case NAME:
                 if (strcmp(students[i].name, (char*)toFind) == 0) {
-                    printf("Comapared!\n");
-                    found[*sizeFound] = students[i];
-                    (*sizeFound)++;
-
+                    foundSmth = true;
+                    *isFound = true;
                 }                    
                 break;
             case SURNAME:
                 if (strcmp(students[i].surname, (char*)toFind) == 0) {
-                    found[*sizeFound] = students[i];
-                    (*sizeFound)++;
-
+                    foundSmth = true;
+                    *isFound = true;
                 }                      
                 break;          
             case GROUP:
                 if (strcmp(students[i].group, (char*)toFind) == 0) {
-                    found[*sizeFound] = students[i];
-                    (*sizeFound)++;
-
+                    foundSmth = true;
+                    *isFound = true;
                 }                    
                 break;
         }
+        if (foundSmth) {
+            *found[*sizeFound] = students[i];
+            (*sizeFound)++;
+        }
+
+        foundSmth = false; 
     }
-    
     return OK;
 }
 
@@ -73,7 +78,7 @@ int compNameGroup(const void * string1, const void * string2) {
     return strcmp((char*)string1, (char*)string2);
 }
 
-Returncode sort(Student * students, size_t * sizeStud, Type type) {
+Returncode sort(Student * students, int * sizeStud, Type type) {
     switch (type) {
         case NAME:
         case SURNAME:

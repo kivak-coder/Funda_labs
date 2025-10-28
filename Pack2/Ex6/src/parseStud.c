@@ -33,19 +33,6 @@ Returncode parseGroup(char * group) {
     if (!group) {
         return WRONG_STRUCT;
     }
-    // char * ptr = group;
-    // int isWrong = -1;
-    // while (*ptr) {
-    //     if (!isalnum(*ptr)) {
-    //         isWrong = 1;
-    //         break;
-    //     }
-    //     ++ptr;
-    // }
-
-    // if (isWrong) {
-    //     return WRONG_STRUCT;
-    // } 
     return OK;
 }
 

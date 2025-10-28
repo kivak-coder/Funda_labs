@@ -4,6 +4,12 @@
 Returncode findType(char * userMsg, Type * type) {
     Returncode returnCode;
     int flag = 0;
+    
+    char * ptr = strchr(userMsg, '\n');
+    if (ptr) {
+        *ptr = '\0';
+    }
+
     if (strcmp(userMsg, "ID") == 0) {
         flag = 1;
         *type = ID;

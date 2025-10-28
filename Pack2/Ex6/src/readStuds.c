@@ -3,9 +3,12 @@
 #include <stdio.h>
 #include <string.h>
 
-Returncode read(Student * students, FILE * inputFile, int * capacity) {
+Returncode read(Student * students, FILE * inputFile, int * capacity, int * size) {
     if (students == NULL || capacity == NULL) {
         return NULL_POINTER;
+    }
+    if (*capacity == 0) {
+        *capacity = 1;
     }
     
     char str[BUFSIZ];
@@ -18,7 +21,6 @@ Returncode read(Student * students, FILE * inputFile, int * capacity) {
     Returncode returnCode;
     
     while (count < *capacity) {
-        printf("%d %d", count, *capacity);
         res = fscanf(inputFile, "%d %s %s %s %c %c %c %c %c", &id0, name0, surname0, group0, &scores0[0], &scores0[1], &scores0[2], &scores0[3], &scores0[4]);
 
         if (res == EOF) {break;}
@@ -71,8 +73,8 @@ Returncode read(Student * students, FILE * inputFile, int * capacity) {
 
         students[count] = stud;
         count++;
-        printf("%d %s %s %s %c %c %c %c %c\n", stud.id, stud.name, stud.surname, stud.group, stud.scores[0], stud.scores[1], stud.scores[2], stud.scores[3], stud.scores[4]);
     }
+    *size = count;
     return OK;
 
 }
