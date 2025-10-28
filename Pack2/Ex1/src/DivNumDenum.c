@@ -1,18 +1,30 @@
 #include "../include/functions.h"
 #include <math.h>
-#include <stdio.h>
 
-ReturnCode DivToNumDenum(double a, double * num, double * denum) {
-    printf("%f\n", a);
-    int n = 0;
-    *num = a;
+ReturnCode DivToNumDenum(double number, double * num, double * denum) {
+    long long int a0 = 0, a1 = 1, b0 = 1, b1 = 0;
+    double x = number;
 
-    while ((int)*num != *num && n < 40) {
-        printf("%f\n", *num);
+    for (int i = 0; i < MAX_ITER; ++i) {
+        long long int a = (long long int)floor(x);
+        long long int temp = a1;
+        a1 = a * a1 + a0;
+        a0 = temp;
 
-        *num *= 10;
-        n++;
+        temp = b1; 
+        b1 = a * b1 + b0;
+        b0 = temp;
+
+        if (fabs(number - (double)a1 / (double)b1) < EPS) {
+            break;
+        }
+        if (x - a < EPS) {
+            break;
+        }
+        x = 1 / (x - a);
     }
-    *denum = pow(10, n);
+    *num = a1;
+    *denum = b1;
+
     return OK;
 }

@@ -2,18 +2,24 @@
 #include <stdio.h>
 
 int main() {
+    
     double a = 0.1;
-    double b = 0.000456;
-    double c = 1.0 / 4.0;
-    double d = 255 / 256.0;
-    int base = 6;
+    double b = 0.25;
+    double c = 2.0 / 3.0;
+    double d = 6.0 / 9.0;
+    double e = 0.1234;
+    double f = 0.125;
+    double g = 1 / 27.0;
+    double h = 1e-20;
+    int base = 3;
+
     ReturnCode returnCode;
 
-    double num;
-    double denum;
-    returnCode = DivToNumDenum(c, &num, &denum);
-    printf("num :%f, denum: %f \n", num, denum);
-    returnCode = AreInfinite(4, 8, a, b, c, d);
+    returnCode = AreInfinite(8, base, a, b, c, d, e, f, g, h);
+
+    if (returnCode != OK) {
+        printf("ERROR!\n");
+    }
 
     return 0;
 }
