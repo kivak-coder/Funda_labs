@@ -1,30 +1,28 @@
 #include "../include/functions.h"
 #include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 
 Returncode find(Student * students, const void * toFind, Student ** found, int * sizeStuds, int * sizeFound, int * capacityFound, Type type, bool * isFound) {
-    printf("%d", *sizeStuds);
-    printf("ABOB\n");
+    
+    if (students == NULL || toFind == NULL || found == NULL || sizeFound == NULL || capacityFound == NULL  || sizeStuds == NULL) {
+        return NULL_POINTER;
+    }
+    if (*capacityFound == 0) {
+        return WRONG_STRUCT; 
+    }
+    
     long int id = 0;
-
-
-    // if (students == NULL || toFind == NULL || found == NULL || sizeFound == NULL || capacityFound == NULL  || sizeStuds == NULL) {
-    //     return NULL_POINTER;
-    // }
-    // if (*sizeFound == 0 || *capacityFound == 0 || *sizeStuds == 0) {
-    //     return WRONG_STRUCT; // not great
-    // }
-
     bool foundSmth = false;
+    
     if (*capacityFound == 0) {
         *capacityFound = 1; 
     }
+
     if (type == ID) {
         char * endptr;
-        id = strtol(toFind, (char**)toFind, 10);
+        id = strtol(toFind, &endptr, 10);
         if (endptr == (const char*)toFind) {
             return WRONG_STRUCT; 
         }

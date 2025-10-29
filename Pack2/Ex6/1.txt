@@ -7,4 +7,5 @@
 12348 Elena Lebedeva CS03 5 5 5 5 5
 12345 Ivan Ivanov CS01 5 5 5 5 5
 12345 Ivan Sidiriv CS01 5 4 5 3 4
-12345 Ivan Rososo CS01 5 5 5 5 5
+12345 Tayler Durden CS01 5 5 5 5 5
+1288282 John Ivanov M8O211 3 2 3 2 3 

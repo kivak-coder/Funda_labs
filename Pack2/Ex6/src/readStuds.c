@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Returncode read(Student * students, FILE * inputFile, int * capacity, int * size) {
+Returncode read(Student ** students, FILE * inputFile, int * capacity, int * size) {
     if (students == NULL || capacity == NULL) {
         return NULL_POINTER;
     }
@@ -20,8 +20,6 @@ Returncode read(Student * students, FILE * inputFile, int * capacity, int * size
     unsigned char scores0[SCORES_SIZE] = {0};
     Returncode returnCode;
     
-
-    
     res = fscanf(inputFile, "%d %s %s %s %c %c %c %c %c", &id0, name0, surname0, group0, &scores0[0], &scores0[1], &scores0[2], &scores0[3], &scores0[4]);
     while (res != EOF) {
 
@@ -32,18 +30,17 @@ Returncode read(Student * students, FILE * inputFile, int * capacity, int * size
 
         if (*size == *capacity) {
             *capacity *= 2;
-            Student * tmp = (Student*)realloc(students, *capacity * sizeof(Student));
+            Student * tmp = (Student*)realloc(*students, *capacity * sizeof(Student));
             if (!tmp) {
-                return ERROR;
+                return ALLOCATION_ERROR;
             }
-            students = tmp;
+            *students = tmp;
         }
         
         returnCode = parseId(&id0);
         if (returnCode == OK) {
             stud.id = id0;
         } else {
-            printf("1");
             return WRONG_STRUCT;
         }
 
@@ -51,7 +48,6 @@ Returncode read(Student * students, FILE * inputFile, int * capacity, int * size
         if (returnCode == OK) {
             strcpy(stud.name, name0);
         } else {
-            printf("2");
             return WRONG_STRUCT;
         }
 
@@ -60,7 +56,6 @@ Returncode read(Student * students, FILE * inputFile, int * capacity, int * size
             strcpy(stud.surname, surname0);
         } else {
 
-            printf("3");
             return WRONG_STRUCT;
         }
 
@@ -68,7 +63,6 @@ Returncode read(Student * students, FILE * inputFile, int * capacity, int * size
         if (returnCode == OK) {
             strcpy(stud.group, group0);
         } else {
-            printf("4");
             return WRONG_STRUCT;
         }
 
@@ -78,11 +72,10 @@ Returncode read(Student * students, FILE * inputFile, int * capacity, int * size
                 stud.scores[i] = scores0[i];
             }
         } else {
-            printf("5");
             return WRONG_STRUCT;
         }
 
-        students[*size] = stud;
+        (*students)[*size] = stud;
         (*size)++;
         res = fscanf(inputFile, "%d %s %s %s %c %c %c %c %c", &id0, name0, surname0, group0, &scores0[0], &scores0[1], &scores0[2], &scores0[3], &scores0[4]);
     }

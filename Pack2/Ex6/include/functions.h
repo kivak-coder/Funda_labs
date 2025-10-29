@@ -8,7 +8,8 @@ typedef enum Returncode {
     OK,
     WRONG_STRUCT,
     NULL_POINTER,
-    ERROR
+    FILE_ERROR,
+    ALLOCATION_ERROR,
 } Returncode;
 
 typedef enum Type {
@@ -21,7 +22,7 @@ typedef enum Type {
 #define EPS 1e-15
 #define CAPACITY 10
 
-Returncode read(Student * students, FILE * file, int * size, int * capacity);
+Returncode read(Student ** students, FILE * file, int * size, int * capacity);
 Returncode find(Student * students, const void * toFind, Student ** found, int * sizeStuds, int * sizeFound, int * capacityFound, Type type, bool *isFound);
 Returncode sort(Student * students, int * sizeStuds, Type type); 
 Returncode print(FILE * file, Student * students, int * sizeStud);

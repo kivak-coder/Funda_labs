@@ -27,6 +27,7 @@ int main(int argc, char ** argv) {
         printf("Error while opening an input file\n");
         return 0;
     }
+
     outputFile = fopen(Output, "w");
     if (!outputFile) {
         printf("Error while opening an output file\n");
@@ -42,6 +43,7 @@ int main(int argc, char ** argv) {
     bool isFound = false;
     Returncode returnCode;
     double avMax = 0.0;
+    char * endptr = NULL;
 
     Student * students = (Student*)malloc(capacityAll * sizeof(Student));
 
@@ -50,8 +52,8 @@ int main(int argc, char ** argv) {
         return 0;
     }
     
-    returnCode = read(students, inputFile, &capacityAll, &sizeAll);
-    printf("Size: %d\n", sizeAll);
+    returnCode = read(&students, inputFile, &capacityAll, &sizeAll);
+
     if (returnCode == WRONG_STRUCT) {
         printf("Wrong struct error!\n");
         return 0;
@@ -60,35 +62,34 @@ int main(int argc, char ** argv) {
         printf("Come across a null pointer!\n");
         return 0;
     }
+    
+    printf("\033[1;36mDo you want to find someone? Enter STOP when you are done. Enter parameter to find at first.\033[0m\n");
 
-    printf("Do you want to find someone? Enter STOP when you are done. Enter parameter to find at first.\n");
     fgets(userMsg, MAX_INPUT - 1, stdin); 
-    while (strcmp(userMsg, "STOP\n") != 0) { //
+    while (strcmp(userMsg, "STOP\n") != 0) { 
         returnCode = findType(userMsg,&type);
 
         if (returnCode != OK) {
-            printf("Wrong data!\n");
+            printf("Wrong input!\n");
             return 0;
         }
-
-        printf("Enter the data you want to find.\n");
+        printf("\033[1;36mEnter the data you want to find.\033[0m\n");
         fgets(data, MAX_INPUT, stdin);
 
         char * ptr = strchr(data, '\n');
         if (ptr) {
             *ptr = '\0';
         }
-
+        unsigned int id = 0;
         switch (type) {
             case ID:
-                char * endptr = NULL;
-                unsigned int id = strtol(data, &endptr, 10);
-                // if (endptr == (const char*)data) {
-                //     return WRONG_STRUCT; 
-                // }
-                // if (*endptr != '\0') {
-                //     return WRONG_STRUCT; 
-                // }
+                id = strtol(data, &endptr, 10);
+                if (endptr == (const char*)data) {
+                    printf("Wrong input!\n");
+                }
+                if (*endptr != '\0') {
+                    printf("Wrong input!\n");
+                }
                 returnCode = parseId(&id);
                 break;
 
@@ -102,7 +103,6 @@ int main(int argc, char ** argv) {
                 break;
         }
         
-        printf("ALRIGHT\n");
 
         if (returnCode == OK) {
             Student * found = (Student*)malloc(capacityFound * sizeof(Student));
@@ -121,42 +121,50 @@ int main(int argc, char ** argv) {
             } else {
                 printf("Could not find anyone\n");
             }
-            printf("Do you want to find someone? Enter STOP if you are done. Enter parameter to find at first.\n");
+            printf("\033[1;36mDo you want to find someone? Enter STOP if you are done. Enter parameter to find at first.\033[0m\n");                
+            free(found);
             fgets(userMsg, MAX_INPUT - 1, stdin); 
         }
     }
 
-    printf("Do you want to sort data? Enter the parameter (ID/NAME/SURNAME/GROUP). Enter STOP if you are done.\n");
+    printf("\033[1;36mDo you want to sort data? Enter the parameter (id/name/surname/group). Enter STOP if you are done.\033[0m\n");
     fgets(userMsg, MAX_INPUT - 1, stdin); 
 
 while (strcmp(userMsg, "STOP\n") != 0) {
-        returnCode = findType(userMsg,&type);
 
+        returnCode = findType(userMsg,&type);
         if (returnCode != OK) {
             printf("Wrong data!\n");
             return 0;
         }
         returnCode = sort(students, &sizeAll, type);
         print(outputFile, students, &sizeAll);
-        printf("Do you want to sort data? Enter the parameter (ID/NAME/SURNAME/GROUP). Enter STOP if you are done.\n");
+        printf("Sorted\n");
+        printf("\033[1;36mDo you want to sort data? Enter the parameter (id/name/surname/group). Enter STOP if you are done.\033[0m\n");
         fgets(userMsg, MAX_INPUT - 1, stdin); 
 
     }
 
     char answer;
-    printf("Do you want to print students with max average scores? (Y/N) \n");
+    printf("\033[1;36mDo you want to print students with max average scores? (Y/N) \033[0m\n");
     scanf("%c", &answer);
     if (answer == 'N') {
         printf("See yor result in a file!\n");
-    } 
 
-    if (answer == 'Y') {
+    } else if (answer == 'Y') {
         Student * avStuds = (Student *)malloc(sizeAll * sizeof(Student));
+        if (!avStuds) {
+            printf("Allocation mistake!\n");
+            return 0;
+        }
         returnCode = average(students,&sizeAll, avStuds, &avMax, &sizeAv); 
         print(outputFile, avStuds, &sizeAv);
         printf("See yor result in a file!\n");
+        free(avStuds);
+    } else {
+        printf("Wrong input\n");
     }
-    
+
     free(students);
     fclose(inputFile);
     fclose(outputFile);

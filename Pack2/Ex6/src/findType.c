@@ -10,22 +10,22 @@ Returncode findType(char * userMsg, Type * type) {
         *ptr = '\0';
     }
 
-    if (strcmp(userMsg, "ID") == 0) {
+    if (strcmp(userMsg, "id") == 0) {
         flag = 1;
         *type = ID;
     }
 
-    if (strcmp(userMsg, "NAME") == 0) {
+    if (strcmp(userMsg, "name") == 0) {
         flag = 1;
         *type = NAME;
     }
 
-    if (strcmp(userMsg, "SURNAME") == 0) {
+    if (strcmp(userMsg, "surname") == 0) {
         flag = 1;
         *type = SURNAME;
     }
 
-    if (strcmp(userMsg, "GROUP") == 0) {
+    if (strcmp(userMsg, "group") == 0) {
         flag = 1;
         *type = GROUP;
     }
