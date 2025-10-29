@@ -8,9 +8,9 @@ ReturnCode DivToNumDenum(double number, double * num, double * denum) {
     for (int i = 0; i < MAX_ITER; ++i) {
         long long int a = (long long int)floor(x);
         long long int temp = a1;
+
         a1 = a * a1 + a0;
         a0 = temp;
-
         temp = b1; 
         b1 = a * b1 + b0;
         b0 = temp;

@@ -11,11 +11,11 @@ int main() {
     double f = 0.125;
     double g = 1 / 27.0;
     double h = 1e-20;
-    int base = 3;
+    int base = 255;
 
     ReturnCode returnCode;
 
-    returnCode = AreInfinite(8, base, a, b, c, d, e, f, g, h);
+    returnCode = AreInfinite(8, base, 1.0/255, b, c, d, e, f, g, 0.333333333333333333333333333333333333333333333333333333333333333333333);   
 
     if (returnCode != OK) {
         printf("ERROR!\n");
