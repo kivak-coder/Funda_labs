@@ -23,6 +23,7 @@ ReturnCode DivToNumDenum(double number, double * num, double * denum) {
         }
         x = 1 / (x - a);
     }
+    
     *num = a1;
     *denum = b1;
 
