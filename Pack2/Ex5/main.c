@@ -11,21 +11,25 @@ int main () {
     scanf("%s", InputFilename);
     FILE * InputFile = fopen(InputFilename, "r");
 
-    while (InputFile == NULL) {
+    if (!InputFile) {
         printf("An error with opening input file! Enter right name.\n");
+        return 0;
     }
 
     printf("Enter output file:\n");
     scanf("%s", outputFilename);
     FILE * OutputFile = fopen(outputFilename, "w");
 
-    while (OutputFile == NULL) {
+    if (!OutputFile) {
         printf("An error with opening output file! Enter right name.\n");
+        return 0;
     }
     char string[BUFSIZ];
     while (fgets(string, BUFSIZ, InputFile) != NULL) {
         rewriteStrings(OutputFile, string);
     }
+    fclose(InputFile);
+    fclose(OutputFile);
     return 0;
 
 }
