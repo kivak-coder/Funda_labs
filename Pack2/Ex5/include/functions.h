@@ -6,6 +6,7 @@
 typedef enum ReturnCode {
     UNKNOWN_SYMBOL,
     NULL_POINTER,
+    FILE_ERROR,
     OK,
 } ReturnCode;
 
@@ -13,9 +14,12 @@ typedef enum ReturnCode {
 
 
 ReturnCode WithoutLeadingSpaces(char * str, char * strRes);
-ReturnCode WithoutFinishingSpaces(char * str);
-ReturnCode SeparateToWords(char * str, char ** words, int * size, int * len);
+ReturnCode WithoutFinishingSpaces(char * str, char * strRes);
+ReturnCode SeparateToWords(char * str, char ** words, int * size);
 ReturnCode writeInFile(FILE * outputFile, char ** words, int * spaces, int * n, int * least);
 ReturnCode rewriteStrings(FILE * Output, char * str);
+bool isReadable(char c);
+void print(char ** words, int * size);
+
 
 

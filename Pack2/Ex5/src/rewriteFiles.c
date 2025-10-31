@@ -1,119 +1,121 @@
-#include "../include/rewriteFiles.h"
+#include "../include/functions.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-ReturnCode WithoutLeadingSpaces(char * str, char * strRes) {
-    if (!str || !strRes) {
+
+ReturnCode writeInFile(FILE * outputFile, char ** wordsToWrite, int * spaces, int * n, int * least) {
+    if (!outputFile || !wordsToWrite) {
         return NULL_POINTER;
     }
+    for (int i = 0; i < *spaces - 1; i++) {
+        int out = fputs(wordsToWrite[i], outputFile); 
+        printf("%s,", wordsToWrite[i]);
 
-    char * ptr = str;   // добавить обработку ошибок!!!!
-    while (*ptr == ' ' || *ptr == '\t') {
-        ++ptr;
-    }
-    strcpy(strRes, ptr);
-    return OK;
-}
+        if (out < 0) {return NULL_POINTER;}
 
-bool isReadable(char c) {
-    if (c == ' ' || c == '\t' || c == '\n') {
-        return false;
-    }
-    return true;
-}
-
-ReturnCode WithoutFinishingSpaces(char * str) {
-    if (!str) {
-        return NULL_POINTER;
-    }
-
-    char * ptr = strchr(str, '\n');  // может вернуть null!!!
-    while (!isReadable(*ptr)) {
-        --ptr;
-    }
-    *ptr = '\0';
-    return OK;
-}
-
-ReturnCode SeparateToWords(char * str, char ** words, int * size, int * len) {
-    if (!str || !words || !size) {
-        return NULL_POINTER;
-    }
-    char * ptrPrev = str;
-    char * ptrCur = str + 1;
-    char buf[MAX_SIZE]; 
-    char * ptrBuf = buf;
-    while (*ptrCur) {
-        if (isReadable(*ptrCur) && !isReadable(*ptrPrev)) {
-            strcpy(words[*size], buf);
-            ++*size;
-        } else {
-            *ptrBuf = *ptrPrev;
-            ++ptrBuf;
-            ++len;
-        }
-        ++ptrCur;
-        ++ptrPrev;
-    }
-    return OK;
-}
-
-ReturnCode writeInFile(FILE * outputFile, char ** words, int * spaces, int * n, int * least) {\
-    if (!outputFile || !words) {
-        return NULL_POINTER;
-    }
-    for (int i = 0; i <= *spaces; i++) {
-        fputs(words[i], outputFile);
         for (int j = 0; j < *n; ++j) {
             fputc(' ', outputFile);
         }
+
         if (*least > 0) {
-            fputc(' ',outputFile);
+            fputc(' ', outputFile);
             --(*least);
         }
     }
+    fputs(wordsToWrite[*spaces - 1], outputFile);
+    fputc('\n', outputFile);
     return OK;
 }
 
 ReturnCode rewriteStrings(FILE * Output, char * str) {
     char strRes[BUFSIZ];
-    char * words[MAX_SIZE]; // массив указателей на строки
+    char * words[MAX_SIZE] = {0}; // массив указателей на строки
+    char strRes2[BUFSIZ];
     int size = 0; // количество слов в массиве
     int LengthAll = 0; // общая длина строки (с пробелами)
     int spaces = 0; // количество промежутков между словами 
-    int n = 1; // количество пробелов в промежутке
+    int n = 0; // количество пробелов в промежутке
     int least = 0; // пробелы, которые невозможно распеределить в каждый промежуток
     ReturnCode returnCode;
-    char * wordsTowrite[MAX_SIZE];
+    char * wordsTowrite[MAX_SIZE] = {0};
 
-    fgets(str, BUFSIZ, Output);
-    WithoutLeadingSpaces(str, strRes);
-    WithoutFinishingSpaces(strRes);
+    // if (strchr(str, ' ') == NULL) { // сплошное слово
+    //     char * ptr = str;
+    //     while (*ptr) {
+    //         for (int i = 0; i < MAX_SIZE; ++i) {
+    //             fputc(*ptr, Output);
+    //             ++ptr;
+    //         }
+    //         fputc('\n',Output);
+    //     }
+    //     return OK;
+    // }
 
-    if (strlen(strRes) <= MAX_SIZE) {
-        fprintf(Output,"%s\n", strRes); // добавить проверку на успешность записи!!!
+    WithoutLeadingSpaces(str, strRes); // добавить вывод о том шо пробелов нет и тогда сократится код выше
+    WithoutFinishingSpaces(strRes, strRes2);
+
+    if (strchr(strRes2, ' ') == NULL) { // слово сплошное
+        char * ptr = str;
+        while (*ptr) {
+            for (int i = 0; i < MAX_SIZE; ++i) {
+                fputc(*ptr, Output);
+                ++ptr;
+            }
+            fputc('\n',Output);
+        }
+        return OK;
+    }
+
+    if (strlen(strRes2) <= MAX_SIZE) {
+        fprintf(Output,"%s\n", strRes2);
+        return OK; // добавить проверку на успешность записи!!!
+
     } else {
 
-        returnCode = SeparateToWords(strRes, words, &size, &LengthAll);
+        returnCode = SeparateToWords(strRes2, words, &size);
 
         for (int i = 0; i < size; ++i) { 
-            if (LengthAll + strlen(words[i]) + 1 > 80) { // мб равно??
-                while (MAX_SIZE - LengthAll - 1 > spaces) { // -1 ибо в послднем слове есть один лищний пробел
+
+            if (LengthAll + strlen(words[i]) >= 80) { 
+
+                WithoutFinishingSpaces(words[i - 1], wordsTowrite[spaces - 1]); // а туда писать то можно
+                strcpy(wordsTowrite[spaces - 1], strRes2);
+                printf("bilo: %lu, str: %s, stalo: %lu, str: %s,\n", strlen(words[i - 1]), words[i - 1], strlen(wordsTowrite[spaces - 1]), wordsTowrite[i - 1]);
+
+                int delta = strlen(words[i - 1]) - strlen(wordsTowrite[spaces - 1]);
+
+                printf("%i \n", delta); 
+                printf("Length: %i\n", LengthAll);
+                LengthAll -= delta;
+
+                while (MAX_SIZE - LengthAll > spaces) { 
                     ++n;
                     LengthAll += spaces;
                 }
 
-                least = MAX_SIZE - LengthAll; // мб надо -1??
+                least = MAX_SIZE - LengthAll; 
                 writeInFile(Output, wordsTowrite, &spaces, &n, &least);
                 least = 0; n = 1; spaces = 0; LengthAll = 0;
+                i--;
+
             } else {
-                LengthAll += strlen(words[i]) + 1;
+                LengthAll += strlen(words[i]);
+                wordsTowrite[spaces] = (char *)malloc(strlen(words[i]) + 1);
+                if (!wordsTowrite[spaces]) {return NULL_POINTER;}
+                strcpy(wordsTowrite[spaces], words[i]);
                 spaces++;
-                wordsTowrite[spaces] = words[i];
             }
         }
     }
+    
+    if (spaces > 0) {
+        least = MAX_SIZE - LengthAll;
+        writeInFile(Output, wordsTowrite, &spaces, &n, &least);
+    }
+
+    for (int i = 0; i < spaces; i++) {
+        free(wordsTowrite[i]);
+    }
     return OK;
 }
-
-     

@@ -1,4 +1,4 @@
-#include "include/rewriteFiles.h"
+#include "include/functions.h"
 #include <stdio.h>
 
 
@@ -26,8 +26,12 @@ int main () {
     }
     char string[BUFSIZ];
     while (fgets(string, BUFSIZ, InputFile) != NULL) {
+        if (strcmp(string, "\n") == 0) {
+            continue;
+        }
         rewriteStrings(OutputFile, string);
     }
+    
     fclose(InputFile);
     fclose(OutputFile);
     return 0;

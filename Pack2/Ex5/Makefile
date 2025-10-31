@@ -1,15 +1,24 @@
 all: main
 
-main: main.o rewriteFiles.o
-	gcc -o main main.o rewriteFiles.o
+main: main.o WithoutSpaces.o SeparateAndCheck.o rewriteFiles.o print.o
+	gcc -o main main.o WithoutSpaces.o SeparateAndCheck.o rewriteFiles.o print.o
 
-main.o: main.c include/rewriteFiles.h
-	gcc -Wpedantic -Wall -Wextra -c main.c -I include
+main.o: main.c include/functions.h
+	gcc -Wall -Wextra -Wpedantic -I include -c main.c
 
-rewriteFiles.o: src/rewriteFiles.c include/rewriteFiles.h
-	gcc -Wpedantic -Wall -Wextra -c src/rewriteFiles.c -I include
+WithoutSpaces.o: src/WithoutSpaces.c include/functions.h
+	gcc -Wall -Wextra -Wpedantic -I include -c src/WithoutSpaces.c -o WithoutSpaces.o
 
-clean: 
-	rm -f *.o main
+print.o: src/print.c include/functions.h
+	gcc -Wall -Wextra -Wpedantic -I include -c src/print.c -o print.o
 
-.PNONY: all clean
+SeparateAndCheck.o: src/SeparateAndCheck.c include/functions.h
+	gcc -Wall -Wextra -Wpedantic -I include -c src/SeparateAndCheck.c -o SeparateAndCheck.o
+
+rewriteFiles.o: src/rewriteFiles.c include/functions.h
+	gcc -Wall -Wextra -Wpedantic -I include -c src/rewriteFiles.c -o rewriteFiles.o
+
+clean:
+	rm -f main *.o
+
+.PHONY: all clean
