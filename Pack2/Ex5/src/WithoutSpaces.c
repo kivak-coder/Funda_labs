@@ -7,7 +7,7 @@ ReturnCode WithoutLeadingSpaces(char * str, char * strRes) {
         return NULL_POINTER;
     }
 
-    char * ptr = str;   // добавить обработку ошибок!!!!
+    char * ptr = str; 
     while (*ptr == ' ' || *ptr == '\t') {
         ++ptr;
     }
@@ -23,13 +23,10 @@ ReturnCode WithoutFinishingSpaces(char * str, char * resStr) {
 
     char * ptr = str + strlen(str) - 1;
 
-    if (!ptr) {
-        return OK;  
-    }
-
     while (!isReadable(*ptr)) {
         --ptr;
     }
+    
     *(ptr + 1) = '\0';
     strcpy(resStr, str);
     return OK;

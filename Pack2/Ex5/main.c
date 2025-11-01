@@ -24,9 +24,9 @@ int main () {
         printf("An error with opening output file! Enter right name.\n");
         return 0;
     }
-    char string[BUFSIZ];
+    char string[BUFSIZ] = {0};
     while (fgets(string, BUFSIZ, InputFile) != NULL) {
-        if (strcmp(string, "\n") == 0) {
+        if (strcmp(string, "\n") == 0 || strcmp(string, "\0") == 0) {
             continue;
         }
         rewriteStrings(OutputFile, string);
