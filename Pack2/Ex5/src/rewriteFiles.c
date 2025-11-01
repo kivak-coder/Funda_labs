@@ -1,15 +1,27 @@
 #include "../include/functions.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 
-ReturnCode writeInFile(FILE * outputFile, char ** wordsToWrite, int * spaces, int * n, int * least) {
+ReturnCode writeInFile(FILE * outputFile, char ** wordsToWrite, int * spaces, int * n, int * least, bool * More) {
     if (!outputFile || !wordsToWrite) {
         return NULL_POINTER;
     }
+
+    if (!(*More)) {
+        for (int i = 0; i < *spaces - 1; i++) {
+            int out = fputs(wordsToWrite[i], outputFile); 
+            if (out < 0) {return NULL_POINTER;}
+        }
+        fputc('\n', outputFile);
+        return OK;
+    } 
+
     for (int i = 0; i < *spaces - 1; i++) {
-        int out = fputs(wordsToWrite[i], outputFile); 
+        int out = fputs(wordsToWrite[i], outputFile);
+
         printf("%s,", wordsToWrite[i]);
 
         if (out < 0) {return NULL_POINTER;}
@@ -23,6 +35,7 @@ ReturnCode writeInFile(FILE * outputFile, char ** wordsToWrite, int * spaces, in
             --(*least);
         }
     }
+    
     fputs(wordsToWrite[*spaces - 1], outputFile);
     fputc('\n', outputFile);
     return OK;
@@ -39,24 +52,15 @@ ReturnCode rewriteStrings(FILE * Output, char * str) {
     int least = 0; // пробелы, которые невозможно распеределить в каждый промежуток
     ReturnCode returnCode;
     char * wordsTowrite[MAX_SIZE] = {0};
+    int i = 0;
+    bool More = false;
 
-    // if (strchr(str, ' ') == NULL) { // сплошное слово
-    //     char * ptr = str;
-    //     while (*ptr) {
-    //         for (int i = 0; i < MAX_SIZE; ++i) {
-    //             fputc(*ptr, Output);
-    //             ++ptr;
-    //         }
-    //         fputc('\n',Output);
-    //     }
-    //     return OK;
-    // }
 
     WithoutLeadingSpaces(str, strRes); // добавить вывод о том шо пробелов нет и тогда сократится код выше
     WithoutFinishingSpaces(strRes, strRes2);
 
     if (strchr(strRes2, ' ') == NULL) { // слово сплошное
-        char * ptr = str;
+        char * ptr = strRes2;
         while (*ptr) {
             for (int i = 0; i < MAX_SIZE; ++i) {
                 fputc(*ptr, Output);
@@ -67,37 +71,47 @@ ReturnCode rewriteStrings(FILE * Output, char * str) {
         return OK;
     }
 
-    if (strlen(strRes2) <= MAX_SIZE) {
-        fprintf(Output,"%s\n", strRes2);
+    if (strlen(strRes) <= MAX_SIZE) {
+        fprintf(Output,"%s\n", strRes);
         return OK; // добавить проверку на успешность записи!!!
 
     } else {
 
-        returnCode = SeparateToWords(strRes2, words, &size);
+        returnCode = SeparateToWords(strRes, words, &size);
+        print(words, &size);
 
         for (int i = 0; i < size; ++i) { 
 
             if (LengthAll + strlen(words[i]) >= 80) { 
 
-                WithoutFinishingSpaces(words[i - 1], wordsTowrite[spaces - 1]); // а туда писать то можно
-                strcpy(wordsTowrite[spaces - 1], strRes2);
-                printf("bilo: %lu, str: %s, stalo: %lu, str: %s,\n", strlen(words[i - 1]), words[i - 1], strlen(wordsTowrite[spaces - 1]), wordsTowrite[i - 1]);
+                More = true;
+                WithoutFinishingSpaces(words[i - 1], wordsTowrite[spaces - 1]);
+
+                printf("bilo: %lu, str: %s, stalo: %lu, str: %s,\n", strlen(words[i - 1]), words[i - 1], strlen(wordsTowrite[spaces - 1]), wordsTowrite[spaces - 1]);
 
                 int delta = strlen(words[i - 1]) - strlen(wordsTowrite[spaces - 1]);
+                least = MAX_SIZE - LengthAll;
+                least += delta;
 
-                printf("%i \n", delta); 
-                printf("Length: %i\n", LengthAll);
-                LengthAll -= delta;
+                printf("%i \n", least);
+                n = least / (spaces - 1);
+                least = least % (spaces - 1); 
 
-                while (MAX_SIZE - LengthAll > spaces) { 
-                    ++n;
-                    LengthAll += spaces;
+                if (n * (spaces - 1) + LengthAll + least == 80) {
+                    printf("YA HUI\n");
                 }
 
-                least = MAX_SIZE - LengthAll; 
-                writeInFile(Output, wordsTowrite, &spaces, &n, &least);
-                least = 0; n = 1; spaces = 0; LengthAll = 0;
+                printf("least: %d, Lengthall: %i, n: %i\n", least, LengthAll, n);
+                writeInFile(Output, wordsTowrite, &spaces, &n, &least, &More);
+    
+                for (int j = 0; j < spaces; j++) {
+                    free(wordsTowrite[j]);
+                }
                 i--;
+                spaces = 0;
+                LengthAll = 0;
+                More = false;
+
 
             } else {
                 LengthAll += strlen(words[i]);
@@ -110,12 +124,33 @@ ReturnCode rewriteStrings(FILE * Output, char * str) {
     }
     
     if (spaces > 0) {
-        least = MAX_SIZE - LengthAll;
-        writeInFile(Output, wordsTowrite, &spaces, &n, &least);
-    }
+        if (LengthAll > 80) {
+            More = true;
+            WithoutFinishingSpaces(words[i - 1], wordsTowrite[spaces - 1]); 
+            int delta = strlen(words[i - 1]) - strlen(wordsTowrite[spaces - 1]);
+            least = MAX_SIZE - LengthAll;
+            least += delta;
 
-    for (int i = 0; i < spaces; i++) {
-        free(wordsTowrite[i]);
+            printf("%i \n", least);
+            n = least / (spaces - 1);
+            least = least % (spaces - 1); 
+
+            if (n * (spaces - 1) + LengthAll + least == 80) {
+                printf("YA HUI\n");
+            }
+
+            writeInFile(Output, wordsTowrite, &spaces, &n, &least, &More);
+
+        } else {
+            writeInFile(Output, wordsTowrite, &spaces, &n, &least, &More);
+           
+        }
+        
+    } 
+
+    for (int j = 0; j < spaces; j++) {
+        free(wordsTowrite[j]);
     }
+    
     return OK;
 }
