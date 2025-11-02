@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-
-typedef enum {
-    OK,
-    NULL_POINTER,
-    NO_ROMANIAN
-} ReturnCode;
+#include "../include/functions.h"
 
 void reverseString(char *str) {
     if (!str) return;
@@ -29,17 +22,16 @@ ReturnCode RomanianNums(int *n, char *str) {
     char strres[16] = {0};
     char *p = strres;
 
-    const char *units[9] = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
-    const char *dozens[9] = {"X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-    const char *hundreds[9] = {"C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
-    const char *thousands[3] = {"M", "MM", "MMM"};
+    const char * units[9] = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+    const char * dozens[9] = {"X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+    const char * hundreds[9] = {"C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+    const char * thousands[3] = {"M", "MM", "MMM"};  // мб закинуть эти массивы в заголовочный?
 
-    int a = *n % 10;        // единицы
-    int b = *n / 10 % 10;   // десятки
-    int c = *n / 100 % 10;  // сотни
-    int d = *n / 1000 % 10; // тысячи
+    int a = *n % 10;        
+    int b = *n / 10 % 10;   
+    int c = *n / 100 % 10;  
+    int d = *n / 1000 % 10; 
 
-    // Правильный порядок: начинаем с тысяч
     if (d > 0) {
         strcpy(p, thousands[d - 1]);
         p += strlen(thousands[d - 1]);
@@ -59,15 +51,6 @@ ReturnCode RomanianNums(int *n, char *str) {
         strcpy(p, units[a - 1]);
     }
 
-    // Копируем результат в выходную строку
     strcpy(str, strres);
     return OK;
-}
-
-int main() {
-    char str[16] = {0};
-    int n = 234;
-    RomanianNums(&n, str);
-    printf("Римское число: %s\n", str); // Должно быть "CCXXXIV"
-    return 0;
 }
