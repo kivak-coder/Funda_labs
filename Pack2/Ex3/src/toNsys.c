@@ -1,17 +1,5 @@
 #include "../include/functions.h"
 #include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-
-void reverseString(char *str) {
-    if (!str) return;
-    int len = strlen(str);
-    for (int i = 0; i < len / 2; i++) {
-        char temp = str[i];
-        str[i] = str[len - i - 1];
-        str[len - i - 1] = temp;
-    }
-}
 
 ReturnCode toNSys(int num, char * str, const int base, bool up) {
     if (!num || !str) {
@@ -62,13 +50,4 @@ ReturnCode toNSys(int num, char * str, const int base, bool up) {
     *ptr = '\0';
     reverseString(str);
     return OK;
-}
-
-int main() {
-    int n = -12345;
-    char str[10];
-    toNSys(n, str, 36, true);
-    printf("%i ", n);
-    printf("%s\n", str);
-    return 0;
 }

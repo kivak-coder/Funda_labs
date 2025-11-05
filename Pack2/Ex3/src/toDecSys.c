@@ -1,7 +1,7 @@
 #include "../include/functions.h"
 
-ReturnCode toDecSys(char * str, const int base, int * res) {
-    if (!str || !res) {
+ReturnCode toDecSys(char * str, const int base, char * resStr) {
+    if (!str || !resStr) {
         return NULL_POINTER;
     }
 
@@ -10,16 +10,18 @@ ReturnCode toDecSys(char * str, const int base, int * res) {
     }
 
     char * ptr = str;
-    bool isNegative = false;
+    char * resPtr = resStr;
+    int res = 0;
 
     if (str[0] == '-') {
-        isNegative = true;
+        *resPtr = '-';
         ++ptr;
+        ++resPtr;
     }
 
     while (*ptr) {
 
-        if (*res >= LONG_MAX / base) {
+        if (res >= LONG_MAX / base) {
             return OVERFLOW;
         }
 
@@ -28,15 +30,21 @@ ReturnCode toDecSys(char * str, const int base, int * res) {
         }
 
         if (isdigit(*ptr)) {
-            *res = *res * (base) + (*ptr - '0');
+            res = res * (base) + (*ptr - '0');
         }
 
         if (isalpha(*ptr)) {
-            *res = *res * (base) + (toupper(*ptr) - 'A' + 10);
+            res = res * (base) + (toupper(*ptr) - 'A' + 10);
         }
         ++ptr;
     }
 
-    if (isNegative) {*res *= -1;}
+    while (res > 0) {
+        *resPtr = res % 10;
+        res /= 10;
+        ++resPtr;
+    }
+    *resPtr = '\0';
+    reverseString(resStr);
     return OK;     
 }
