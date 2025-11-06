@@ -1,4 +1,5 @@
 #include "../include/functions.h"
+#include <stdio.h>
 
 ReturnCode toDecSys(char * str, const int base, char * resStr) {
     if (!str || !resStr) {
@@ -18,7 +19,6 @@ ReturnCode toDecSys(char * str, const int base, char * resStr) {
         ++ptr;
         ++resPtr;
     }
-
     while (*ptr) {
 
         if (res >= LONG_MAX / base) {
@@ -40,7 +40,7 @@ ReturnCode toDecSys(char * str, const int base, char * resStr) {
     }
 
     while (res > 0) {
-        *resPtr = res % 10;
+        *resPtr = res % 10 + '0';
         res /= 10;
         ++resPtr;
     }
