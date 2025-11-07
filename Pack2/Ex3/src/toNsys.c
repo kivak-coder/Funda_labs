@@ -1,9 +1,8 @@
 #include "../include/functions.h"
 #include <stdbool.h>
-#include <stdio.h>
 
 ReturnCode toNSys(int num, char * str, const int base, bool up) {
-    if (!num || !str) {
+    if (!str) {
         return NULL_POINTER;
     }
 

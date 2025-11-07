@@ -1,5 +1,4 @@
 #include "../include/functions.h"
-#include <stdio.h>
 
 ReturnCode toDecSys(char * str, const int base, char * resStr) {
     if (!str || !resStr) {
@@ -12,7 +11,7 @@ ReturnCode toDecSys(char * str, const int base, char * resStr) {
 
     char * ptr = str;
     char * resPtr = resStr;
-    int res = 0;
+    int res = 0; int digit = 0;
 
     if (str[0] == '-') {
         *resPtr = '-';
@@ -30,11 +29,19 @@ ReturnCode toDecSys(char * str, const int base, char * resStr) {
         }
 
         if (isdigit(*ptr)) {
-            res = res * (base) + (*ptr - '0');
+            digit = (*ptr - '0');
+            if (digit >= base) {
+                return INVALID_DATA;
+            }
+            res = res * (base) + digit;
         }
 
         if (isalpha(*ptr)) {
-            res = res * (base) + (toupper(*ptr) - 'A' + 10);
+            digit = toupper(*ptr) - 'A' + 10;
+            if (digit >= base) {
+                return INVALID_DATA;
+            }
+            res = res * (base) + digit;
         }
         ++ptr;
     }

@@ -18,10 +18,10 @@ void test_roman() {
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Граничные значения
-    result = oversprintf(buffer, "Max basic: %Ro", 3999);
+    result = oversprintf(buffer, "Max basic: %Ro", 399); 
     printf("res: %i, buffer: %s\n", result, buffer);
     
-    result = oversprintf(buffer, "Year: %Ro", 2024);
+    result = oversprintf(buffer, "Year: %Ro", 5000); // перезаписывает строку выше чо делать 
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Несколько римских чисел
@@ -32,8 +32,8 @@ void test_roman() {
     result = oversprintf(buffer, "Mixed: %Ro (decimal: %d), %Ro (hex: 0x%x)", 255, 255, 100, 100);
     printf("res: %i, buffer: %s\n", result, buffer);
     
-    // Отрицательные числа (как обрабатываются?)
-    result = oversprintf(buffer, "Negative: %Ro", -123);
+    buffer[0] = '\0';
+    result = oversprintf(buffer, "Negative: %Ro", -123); 
     printf("res: %i, buffer: %s\n", result, buffer);
     
     printf("\n");
@@ -46,7 +46,7 @@ void test_zeckendorf() {
     int result = 0;
     
     // Базовые тесты
-    result = oversprintf(buffer, "Z1: %Zr", 1); // ABOB
+    result = oversprintf(buffer, "Z1: %Zr", 21);
     printf("res: %i, buffer: %s\n", result, buffer);
     
     result = oversprintf(buffer, "Z4: %Zr", 4);
@@ -76,11 +76,11 @@ void test_number_systems() {
     int result = 0;
     
     // Двоичная система
-    result = oversprintf(buffer, "Binary: %Cv", 255, 2);
+    result = oversprintf(buffer, "Binary: %Cv", 0, 2);
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Восьмеричная система
-    result = oversprintf(buffer, "Octal: %Cv", 255, 8);
+    result = oversprintf(buffer, "Octal: %Cv", 255, 2);
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Шестнадцатеричная система (нижний регистр)
@@ -95,7 +95,7 @@ void test_number_systems() {
     result = oversprintf(buffer, "Base 36 lower: %Cv", 35, 36);
     printf("res: %i, buffer: %s\n", result, buffer);
     
-    result = oversprintf(buffer, "Base 36 upper: %CV", 35, 36);
+    result = oversprintf(buffer, "Base 36 upper: %CV", 36363636, 36);
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Невалидные основания
@@ -123,7 +123,7 @@ void test_conversion() {
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Из восьмеричной
-    result = oversprintf(buffer, "Octal to dec: %to", "377", 8);
+    result = oversprintf(buffer, "Octal to dec: %TO", "377", 8);
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Из шестнадцатеричной (нижний регистр)
@@ -139,14 +139,14 @@ void test_conversion() {
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Невалидные строки
-    result = oversprintf(buffer, "Invalid hex: %to", "xyz", 16); // ABOB
+    result = oversprintf(buffer, "Invalid hex: %to", "xyz", 16); // ура он снова перезаписывает буфер
     printf("res: %i, buffer: %s\n", result, buffer);
     
     result = oversprintf(buffer, "Invalid base: %to", "123", 37);
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Пустая строка
-    result = oversprintf(buffer, "Empty string: %to", "", 16);
+    result = oversprintf(buffer, "Empty string: %TO", "", 16);
     printf("res: %i, buffer: %s\n", result, buffer);
     
     printf("\n");
@@ -211,12 +211,12 @@ void test_combined() {
     // Комбинация с преобразованием 
     result = oversprintf(buffer, "Conversion: %to (hex) = %d (dec) | %TO (HEX) = %d", 
                         "ff", 16, 255, "FF", 16, 255);
-    printf("res: %i, buffer: %s\n", result, buffer); // ABOB
+    printf("res: %i, buffer: %s\n", result, buffer); 
     
     // Комбинация с дампом памяти
     int test_val = 305419896; // 0x12345678
     result = oversprintf(buffer, "Memory: %mi (signed) = %mu (unsigned)", test_val, test_val);
-    printf("res: %i, buffer: %s\n", result, buffer); // ABOB
+    printf("res: %i, buffer: %s\n", result, buffer); 
     
     // Смесь пользовательских и стандартных
     result = oversprintf(buffer, "Mixed: Roman %Ro, Hex 0x%x, Zeck %Zr, String '%s'", 
@@ -249,11 +249,11 @@ void test_edge_cases() {
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Отрицательные для беззнаковых
-    result = oversprintf(buffer, "Negative uint: %mu", -1); // ABOB
+    result = oversprintf(buffer, "Negative uint: %mu", -1); 
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Неправильное количество аргументов
-    result = oversprintf(buffer, "Missing arg: %Cv", 255); // нет основания ABOB
+    result = oversprintf(buffer, "Missing arg: %Cv", 255); 
     printf("res: %i, buffer: %s\n", result, buffer);
     
     // Спецификаторы без процента

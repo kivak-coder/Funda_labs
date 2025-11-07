@@ -4,6 +4,9 @@ ReturnCode Zeckendorf(unsigned int a, char * str) {
     if (!str) {
         return NULL_POINTER;
     }
+    if (a >= 4000) {
+        return NO_ROMAN;
+    }
 
     int capacity = CAPACITY;
     int size = 1;
@@ -15,7 +18,7 @@ ReturnCode Zeckendorf(unsigned int a, char * str) {
     fibonacci[0] = 0;
     fibonacci[1] = 1;
 
-    while (a > fibonacci[size]) { // заполняем числами фибоначчи до первого числа больше а
+    while (a >= fibonacci[size]) { // заполняем числами фибоначчи до первого числа больше а
 
         ++size;
 
@@ -44,7 +47,6 @@ ReturnCode Zeckendorf(unsigned int a, char * str) {
     str[size - 3] = '1';
     str[size - 2] = '\0';
 
-
     while (a > 0) {
 
         for (int i = size - 1; i > 0; i--) {
@@ -62,4 +64,4 @@ ReturnCode Zeckendorf(unsigned int a, char * str) {
     free(fibonacci);
     return OK;
 
-}  // а тут все нормально с валидациями????????????
+}  
