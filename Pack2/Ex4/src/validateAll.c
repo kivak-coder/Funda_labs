@@ -1,7 +1,7 @@
 #include "../include/functions.h"
 #include <ctype.h>
 
-ReturnCode validateZeckendorf(char * str) {
+ReturnCode validateZeckendorf(char * str) { // в смысле валидация не требуется ептить
     if (!str) {
         return NULL_POINTER;
     }

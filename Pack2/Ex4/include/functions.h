@@ -8,6 +8,7 @@ typedef enum ReturnCode {
     INVALID_DATA,
     NULL_POINTER,
     OVERFLOW,
+    READ_ERROR,
     OK,
 } ReturnCode;
 
@@ -21,8 +22,12 @@ typedef enum RomanNum {
     M = 1000
 } RomanNum;
 
-#define CAPACITY 20
-
-ReturnCode Romanian(char * str, int * res);
+ReturnCode Roman(char * str, int * res);
 ReturnCode toDecSys(char * str, int * res, const int base);
 ReturnCode Zeckendorf(char * str, int * res);
+
+ReturnCode validateZeckendorf(char * str);
+ReturnCode validateRoman(char * str);
+ReturnCode validateNumInBase(char * str, const int base);
+
+

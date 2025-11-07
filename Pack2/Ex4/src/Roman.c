@@ -1,5 +1,6 @@
 #include "../include/functions.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 
 ReturnCode getRoman(char c, RomanNum * num) {
@@ -41,7 +42,7 @@ ReturnCode getRoman(char c, RomanNum * num) {
 ReturnCode Roman(char *str, int *res) {
     if (!res || !str) {
         return NULL_POINTER;
-    }
+    } // добавить проверку на переполнение!
 
     char * ptrPrev = str;
     char * ptrCur = str + 1;
