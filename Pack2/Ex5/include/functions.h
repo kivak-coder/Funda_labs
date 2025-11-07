@@ -4,9 +4,9 @@
 
 
 typedef enum ReturnCode {
-    UNKNOWN_SYMBOL,
     NULL_POINTER,
     FILE_ERROR,
+    WRITE_ERROR,
     OK,
 } ReturnCode;
 

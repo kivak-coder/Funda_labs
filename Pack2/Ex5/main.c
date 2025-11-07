@@ -26,9 +26,6 @@ int main () {
     }
     char string[BUFSIZ] = {0};
     while (fgets(string, BUFSIZ, InputFile) != NULL) {
-        if (strcmp(string, "\n") == 0 || strcmp(string, "\0") == 0) {
-            continue;
-        }
         rewriteStrings(OutputFile, string);
     }
     
