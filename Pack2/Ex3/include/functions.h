@@ -8,7 +8,7 @@
 
 typedef enum ReturnCode {
     OK = 0,
-    NO_ROMANIAN = -1,
+    NO_ROMAN = -1,
     NULL_POINTER = -2,
     MEMORY_ALLOCATION_ERROR = -3,
     INVALID_DATA = -4,
@@ -27,4 +27,4 @@ ReturnCode memDump(void * data, size_t size, char * resStr);
 void reverseString(char *str);
 ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inString);
 int oversprintf(char * string, const char * format, ...);
-int overfprintf(FILE * string, const char * format, ...);
+int overfprintf(FILE * file, const char * format, ...);

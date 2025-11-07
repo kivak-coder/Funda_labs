@@ -7,7 +7,7 @@ ReturnCode RomanNums(int *n, char *str) {
     }
 
     if (*n >= 4000 || *n <= 0) {
-        return NO_ROMANIAN;
+        return NO_ROMAN;
     }
 
     char strres[16] = {0};

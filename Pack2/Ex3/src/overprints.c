@@ -29,6 +29,7 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
 
     int chars = 0; int base = 10;
     char buffer[BUFSIZ];
+    char specifier[32] = {'%'};
     ReturnCode returnCode;
     const char * ptr = format;
     bool up;
@@ -179,16 +180,27 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
                     ptr += 2;
                 }
 
-            } else if (strchr("diufFeEgGxXoscpaA", *ptr)) {
+            } else {
+                int len = 1;
 
-                const char spec[3] = {'%', *ptr, '\0'};
+                while (*ptr && !strchr("diouxXeEfFgGaAcspn", *ptr)) {
+                    specifier[len] = *ptr;
+                    ++ptr; ++len;
+
+                }
+                if (strchr("diouxXeEfFgGaAcspn", *ptr)) {
+                    specifier[len] = *ptr;
+                    ++len;
+                }
+                specifier[len] = '\0';
+
                 int written = -1;
                 va_copy(args_copy, *arg);
 
                 if (inString) {
-                    written = vsnprintf((char*)stream + chars, BUFSIZ - chars, spec, args_copy);
+                    written = vsnprintf((char*)stream + chars, BUFSIZ - chars, specifier, *arg);
                 } else {
-                    written = vfprintf((FILE*)stream, spec, args_copy);
+                    written = vfprintf((FILE*)stream, specifier, *arg);
                 }
 
                 va_end(args_copy);
@@ -196,9 +208,6 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
                 chars += written;
                 ptr++;
 
-        
-            } else {
-                return INVALID_SPECIFIER;;
             }
         }
     }
@@ -209,8 +218,6 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
 
     return chars; 
 }
-
-
 
 int oversprintf(char * string, const char * format, ...) {
     va_list arg;

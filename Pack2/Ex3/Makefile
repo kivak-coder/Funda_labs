@@ -1,19 +1,19 @@
 all: main
 
-main: main.o functions.o toDecSys.o Romanian.o toNsys.o reverseString.o Zeckendorf.o tests.o memoryDumps.o
-	gcc -o main main.o functions.o toDecSys.o Romanian.o toNsys.o reverseString.o Zeckendorf.o tests.o memoryDumps.o
+main: main.o overprints.o toDecSys.o Roman.o toNsys.o reverseString.o Zeckendorf.o tests.o memoryDumps.o
+	gcc -o main main.o overprints.o toDecSys.o Roman.o toNsys.o reverseString.o Zeckendorf.o tests.o memoryDumps.o
 
 main.o: main.c
 	gcc -c main.c
 
-functions.o: src/functions.c
-	gcc -c src/functions.c
+overprints.o: src/overprints.c
+	gcc -c src/overprints.c
 
 toDecSys.o: src/toDecSys.c
 	gcc -c src/toDecSys.c
 
-Romanian.o: src/Romanian.c
-	gcc -c src/Romanian.c
+Roman.o: src/Roman.c
+	gcc -c src/Roman.c
 
 toNsys.o: src/toNsys.c
 	gcc -c src/toNsys.c
@@ -27,8 +27,8 @@ Zeckendorf.o: src/Zeckendorf.c
 memoryDumps.o: src/memoryDumps.c
 	gcc -c src/memoryDumps.c
 
-tests.o: src/tests.c
-	gcc -c src/tests.c
+tests.o: tests/tests.c
+	gcc -c tests/tests.c
 
 clean:
 	rm -f *.o main

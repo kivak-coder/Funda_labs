@@ -1,0 +1,6 @@
+=== Testing overfprintf ===
+Roman: XLIX
+Zeckendorf: 0101011
+Hex: ff
+Memory dump: 01111000 01010110 00110100 00010010 
+Mixed: CCLV in hex is 0xff

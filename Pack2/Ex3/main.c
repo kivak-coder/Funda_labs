@@ -2,15 +2,16 @@
 #include <stdio.h>
 
 int main() {
-    printf("Starting all tests...\n\n");
+    test_roman();
+    test_zeckendorf();
+    test_number_systems();
+    test_conversion();
+    test_memory_dump();
+    test_combined();
+    test_edge_cases();
+    test_file_output();
+    test_performance();
     
-    test1();  // Roman numerals
-    test2();  // Zeckendorf representation  
-    test3();  // Number system conversion
-    test4();  // Decimal conversion
-    test5();  // String reversal
-    test6();  // overfprintf and oversprintf
-    
-    printf("All tests completed.\n");
+    printf("=== All tests completed ===\n");
     return 0;
 }
