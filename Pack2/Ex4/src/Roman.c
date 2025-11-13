@@ -1,7 +1,5 @@
 #include "../include/functions.h"
 #include <stdio.h>
-#include <stdlib.h>
-
 
 ReturnCode getRoman(char c, RomanNum * num) {
     switch (c) {

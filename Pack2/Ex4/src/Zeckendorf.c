@@ -1,6 +1,5 @@
 #include "../include/functions.h"
 #include <limits.h>
-#include <stdio.h>
 
 ReturnCode Zeckendorf(char *str, int *res) {
     if (!str || !res) {

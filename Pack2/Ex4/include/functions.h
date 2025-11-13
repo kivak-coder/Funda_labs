@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <limits.h>
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 
@@ -28,6 +29,10 @@ ReturnCode Zeckendorf(char * str, int * res);
 
 ReturnCode validateZeckendorf(char * str);
 ReturnCode validateRoman(char * str);
+bool isRoman(char c);
 ReturnCode validateNumInBase(char * str, const int base);
+int overfscanf(FILE * file, const char * format, ...);
+int oversscanf(char * string, const char *format, ...);
+
 
 

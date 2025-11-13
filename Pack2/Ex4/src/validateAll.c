@@ -17,10 +17,10 @@ ReturnCode validateZeckendorf(char * str) { // в смысле валидаци�
 }
 
 bool isRoman(char c) {
-    if (c != 'I' || c != 'X' || c != 'L' || c != 'C' || c != 'D' || c != 'M') {
-        return false;
+    if (c == 'I' || c == 'X' || c == 'L' || c == 'C' || c == 'D' || c == 'M') {
+        return true;
     }
-    return true;
+    return false;
 }
 
 ReturnCode validateRoman(char * str) {
