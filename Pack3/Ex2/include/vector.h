@@ -127,6 +127,7 @@
     for (size_t i = 0; i < vector->size - 1 - index; ++i) {                    \
       vector->data[index + i] = vector->data[index + i + 1];                   \
     }                                                                          \
+    vector->size--;                                                            \
   }
 
 #endif
