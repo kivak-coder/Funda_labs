@@ -15,8 +15,8 @@ void DeleteFunc(int num) {
 }
 
 int main() {
-    Vector *vector = NULL;
-    Vector *vectorCopy = NULL;
+    Vector * vector = NULL;
+    Vector * vectorCopy = NULL;
     int choice;
     
     do {
@@ -29,7 +29,6 @@ int main() {
         printf("6. Показать все элементы\n");
         printf("7. Создать копию вектора\n");
         printf("8. Удалить вектор\n");
-        printf("9. Сравнить с другим вектором\n");
         printf("0. Выход\n");
         printf("Выберите команду: ");
         scanf("%d", &choice);
@@ -47,7 +46,7 @@ int main() {
                 
                 vector = createVector(capacity, CopyFunc, DeleteFunc);
                 if (vector != NULL) {
-                    printf("Вектор успешно создан с емкостью %zu\n", capacity);
+                    printf("Вектор успешно создан\n");
                 } else {
                     printf("Ошибка при создании вектора!\n");
                 }
@@ -56,23 +55,23 @@ int main() {
                 
             case 2: {
                 if (vector == NULL) {
-                    printf("Вектор не создан! Сначала создайте вектор.\n");
+                    printf("Вектор не создан!\n");
                     break;
                 }
 
                 int value = 0;
 
-                printf("Введите значение для добавления: ");
+                printf("Введите значение: ");
                 scanf("%i", &value);
                 
                 pushBackVector(vector, value);
-                printf("Элемент %d добавлен в вектор\n", value);
+                printf("Элемент %d добавлен\n", value);
                 break;
             }
                 
             case 3: {
                 if (vector == NULL) {
-                    printf("Вектор не создан! Сначала создайте вектор.\n");
+                    printf("Вектор не создан!\n");
                     break;
                 }
                 
@@ -87,13 +86,12 @@ int main() {
                 
                 int value = getAtVector(vector, index);
                 printf("Элемент по индексу %zu: %i\n", index, value);
-
                 break;
             }
                 
             case 4: {
                 if (vector == NULL) {
-                    printf("Вектор не создан! Сначала создайте вектор.\n");
+                    printf("Вектор не создан!\n");
                     break;
                 }
                 
@@ -171,27 +169,11 @@ int main() {
                 break;
             }
                 
-            case 9: {
-                if (vector == NULL || vectorCopy == NULL) {
-                    printf("Оба вектора должны быть созданы для сравнения!\n");
-                    break;
-                }
-                
-                int result = isEqual(vector, vectorCopy);
-                if (result) {
-                    printf("Векторы идентичны\n");
-                } else {
-                    printf("Векторы различны\n");
-                }
-                break;
-            }
-                
             case 0:
-                printf("Выход из программы...\n");
                 break;
                 
             default:
-                printf("Неверная команда! Попробуйте снова.\n");
+                printf("Неверная команда!\n");
                 break;
         }
         

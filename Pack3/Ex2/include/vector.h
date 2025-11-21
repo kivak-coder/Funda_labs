@@ -78,7 +78,7 @@
       return (VECTOR_TYPE)0;                                                   \
     }                                                                          \
     if (index >= vector->size) {                                               \
-      return vector->data[vector->size - 1];                                       \
+      return vector->data[vector->size - 1];                                   \
     }                                                                          \
     return vector->data[index];                                                \
   }                                                                            \
@@ -96,11 +96,11 @@
       return;                                                                  \
     }                                                                          \
     eraseVector(dest);                                                         \
-    dest->data = (VECTOR_TYPE *)malloc(dest->capacity * sizeof(VECTOR_TYPE));  \
+    dest->data = (VECTOR_TYPE *)malloc(src->capacity * sizeof(VECTOR_TYPE));  \
     dest->size = src->size;                                                    \
     dest->capacity = src->capacity;                                            \
     for (size_t i = 0; i < src->size; ++i) {                                   \
-      dest->data[i] = dest->CopyVoidPtr(src->data[i]);                                         \
+      dest->data[i] = dest->CopyVoidPtr(src->data[i]);                         \
     }                                                                          \
   }                                                                            \
                                                                                \
@@ -111,7 +111,7 @@
     Vector *vector =                                                           \
         createVector(src->capacity, src->CopyVoidPtr, src->DeleteVoidPtr);     \
     for (size_t i = 0; i < src->size; ++i) {                                   \
-      vector->data[i] = vector->CopyVoidPtr(src->data[i]);                                       \
+      vector->data[i] = vector->CopyVoidPtr(src->data[i]);                     \
     }                                                                          \
     return vector;                                                             \
   }                                                                            \
