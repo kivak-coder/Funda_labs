@@ -26,7 +26,11 @@ int main () {
     }
     char string[BUFSIZ] = {0};
     while (fgets(string, BUFSIZ, InputFile) != NULL) {
-        rewriteStrings(OutputFile, string);
+        returnCode = rewriteStrings(OutputFile, string);
+        if (returnCode != OK) {
+            printf("An error occured!\n");
+            return 0;
+        }
     }
     
     fclose(InputFile);

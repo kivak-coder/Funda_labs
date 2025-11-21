@@ -1,7 +1,7 @@
 all: main
 
-main: main.o WithoutSpaces.o SeparateAndCheck.o rewriteFiles.o print.o
-	gcc -o main main.o WithoutSpaces.o SeparateAndCheck.o rewriteFiles.o print.o
+main: main.o WithoutSpaces.o SeparateAndCheck.o rewriteFiles.o 
+	gcc -o main main.o WithoutSpaces.o SeparateAndCheck.o rewriteFiles.o 
 
 main.o: main.c include/functions.h
 	gcc -Wall -Wextra -Wpedantic -I include -c main.c

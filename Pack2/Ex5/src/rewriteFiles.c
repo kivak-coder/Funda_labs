@@ -53,9 +53,7 @@ ReturnCode rewriteStrings(FILE * Output, char * str) {
     int size = 0; int LengthAll = 0; 
     int spaces = 0; int n = 0; int least = 0; 
     int i = 0;
-
     ReturnCode returnCode;
-
     bool More = false;
 
     returnCode = WithoutLeadingSpaces(str, strRes);
@@ -83,7 +81,7 @@ ReturnCode rewriteStrings(FILE * Output, char * str) {
             int i = 0;
 
             while (*ptr) {
-                if (i < MAX_SIZE - 1) {
+                if (i < MAX_SIZE) {
                     if (fputc(*ptr, Output) == EOF) {
                         return WRITE_ERROR;
                     }
