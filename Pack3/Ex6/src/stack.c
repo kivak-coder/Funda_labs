@@ -7,19 +7,19 @@ Stack * createStack() {
     if (!stack) {
         return NULL;
     }
-
-    stack->size = 0;
-    stack->capacity = CAPACITY;
     stack->data = (char *)malloc(CAPACITY * sizeof(char));
     if (!stack->data) {
+        free(stack);
         return NULL;
     }
+    stack->size = 0;
+    stack->capacity = CAPACITY;
     return stack;
 }
 
 bool isEmpty(Stack *stack) {
     if (!stack) {
-        return NULL;
+        return true;
     }
     return stack->size == 0;
 }
@@ -74,8 +74,3 @@ void push(Stack * stack, char c) {
     stack->size++;
 }
 
-void printStack(Stack * stack) {
-    for (int i = 0; i < stack->size; ++i) {
-        printf("%c ", stack->data[i]);
-    }
-}

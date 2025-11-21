@@ -1,5 +1,4 @@
 #include "../include/functions.h"
-#include <stdio.h>
 #include <string.h>
 
 ReturnCode isClosing(const char *bracket) {
@@ -31,15 +30,29 @@ ReturnCode checkBrackets(const char * str){
 
     const char * ptr = str;
     Stack * stack = createStack();
+    if (!stack) {
+        return NULL_POINTER;
+    }
 
     while (*ptr != '\0') {
-        if (isClosing(ptr) == NOT_BRACKET && isOpening(ptr) == NOT_BRACKET) {
+
+        ReturnCode returnCodeOpening = isOpening(ptr);
+        ReturnCode returnCodeClosing = isClosing(ptr);
+
+        if (returnCodeOpening == NULL_POINTER || returnCodeClosing == NULL_POINTER) {
+            return NULL_POINTER;
+        }
+
+        if (returnCodeOpening == NOT_BRACKET && returnCodeClosing == NOT_BRACKET) {
             ++ptr;
+
         } else {
-            if (isOpening(ptr) == OK) {
+            if (returnCodeOpening == OK) {
                 push(stack, *ptr);
                 ++ptr;
-            } else if (isClosing(ptr) == OK) {
+
+            } else if (returnCodeClosing == OK) {
+                
                 if (isEmpty(stack)) {
                     deleteStack(stack);
                     return NOT_BALANCED;
@@ -62,5 +75,6 @@ ReturnCode checkBrackets(const char * str){
         deleteStack(stack);
         return NOT_BALANCED;
     }
+    deleteStack(stack);
     return OK;
 }
