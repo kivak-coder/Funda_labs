@@ -28,7 +28,7 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
     }
 
     int chars = 0; int base = 10;
-    char buffer[BUFSIZ];
+    char buffer[BUFSIZ] = {0};
     char specifier[32] = {'%'};
     ReturnCode returnCode;
     const char * ptr = format;
@@ -86,13 +86,14 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
             } else if (*ptr == 'C') {
                 if (*(ptr + 1) == 'v' || *(ptr + 1) == 'V') {
                     int num = va_arg(*arg, int);
-
+                    va_list args_copy;
                     va_copy(args_copy, *arg);
-
-                    if (args_copy > 0) {
-                        base = va_arg(*arg, int);
+                    
+                    if (va_arg(args_copy, int)) {  
+                        base = va_arg(*arg, int);  
+                    } else {
+                        base = 10;  
                     }
-
                     va_end(args_copy);
 
                     up = *(ptr + 1) == 'V'; 
@@ -111,12 +112,14 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
 
             } else if ((*ptr == 't' && *(ptr + 1) == 'o') || (*ptr == 'T' && *(ptr + 1) == 'O')) {
                 char * str = va_arg(*arg, char *);
+                va_list args_copy;
                 va_copy(args_copy, *arg);
-
-                if (args_copy > 0) {
-                    base = va_arg(*arg, int);
+                
+                if (va_arg(args_copy, int)) {  
+                    base = va_arg(*arg, int);  
+                } else {
+                    base = 10;  
                 }
-
                 va_end(args_copy);
                 returnCode = toDecSys(str, base, buffer);
 
@@ -141,7 +144,6 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
                     returnCode = print(stream, buffer, &chars, inString);
                     if (returnCode != OK) {return returnCode;}
 
-                    ptr += 2;
                 }
 
                 if (*(ptr + 1) == 'u') {
@@ -153,7 +155,6 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
                     returnCode = print(stream, buffer, &chars, inString);
                     if (returnCode != OK) {return returnCode;}
 
-                    ptr += 2;
                 }
 
                 if (*(ptr + 1) == 'd') {
@@ -165,11 +166,10 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
                     returnCode = print(stream, buffer, &chars, inString);
                     if (returnCode != OK) {return returnCode;}
 
-                    ptr += 2;
                 }
 
                 if (*(ptr + 1) == 'f') {
-                    float num = va_arg(*arg, double); // а поч оно на флоат жаловалось
+                    float num = va_arg(*arg, double);
 
                     returnCode = memDump(&num, sizeof(float), buffer);
                     if (returnCode != OK) {return returnCode;}
@@ -177,8 +177,8 @@ ReturnCode overprint(void * stream, const char * format, va_list* arg, bool inSt
                     returnCode = print(stream, buffer, &chars, inString);
                     if (returnCode != OK) {return returnCode;}
 
-                    ptr += 2;
                 }
+                ptr += 2;
 
             } else {
                 int len = 1;

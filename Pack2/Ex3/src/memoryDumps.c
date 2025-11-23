@@ -22,7 +22,7 @@ ReturnCode memDump(void * data, size_t size, char * resStr) {
             ++resPtr;
         }
         
-        if (i != 7) {
+        if (i != size - 1) {
             *resPtr = ' ';
             ++resPtr;  
         }

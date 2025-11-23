@@ -4,9 +4,6 @@ ReturnCode Zeckendorf(unsigned int a, char * str) {
     if (!str) {
         return NULL_POINTER;
     }
-    if (a >= 4000) {
-        return NO_ROMAN;
-    }
 
     int capacity = CAPACITY;
     int size = 1;
