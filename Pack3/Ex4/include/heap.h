@@ -8,7 +8,6 @@ typedef struct Heap {
     size_t capacity;
 } Heap;
 
-
 Heap createHeap(size_t initialCapacity);
 void deleteHeap(Heap *h);
 int isEmptyHeap(const Heap *h);
@@ -18,3 +17,6 @@ void pushHeap(Heap *h, int value);
 int popHeap(Heap *h);
 Heap buildHeap(const int *array, size_t n);
 int isEqualHeap(const Heap *h1, const Heap *h2);
+void heapifyUp(Heap * heap, size_t index);
+void heapifyDown(Heap * heap, size_t index);
+void printHeap(Heap * heap);
