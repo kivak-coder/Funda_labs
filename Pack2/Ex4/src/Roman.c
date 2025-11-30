@@ -1,5 +1,5 @@
 #include "../include/functions.h"
-#include <stdio.h>
+#include <string.h>
 
 ReturnCode getRoman(char c, RomanNum * num) {
     switch (c) {
@@ -42,11 +42,21 @@ ReturnCode Roman(char *str, int *res) {
         return NULL_POINTER;
     } // добавить проверку на переполнение!
 
+    RomanNum roman1;
+    ReturnCode returnCode;
+
+    if (strlen(str) == 1) {
+        returnCode = getRoman(str[0], &roman1);
+        if (returnCode != OK) {
+            return returnCode;
+        }
+        *res = roman1;
+        return OK;
+    }
+
     char * ptrPrev = str;
     char * ptrCur = str + 1;
-    RomanNum roman1;
-    RomanNum roman2; 
-    ReturnCode returnCode;
+    RomanNum roman2 = 'I'; 
 
     while (*ptrCur) {
         returnCode = getRoman(*ptrPrev, &roman1);
@@ -80,8 +90,8 @@ ReturnCode Roman(char *str, int *res) {
             *res -= roman1;
         }
 
-        printf("%i\n", *res);
 
     return OK;
 }
+
 

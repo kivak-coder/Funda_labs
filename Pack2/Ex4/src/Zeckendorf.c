@@ -6,10 +6,11 @@ ReturnCode Zeckendorf(char *str, int *res) {
         return NULL_POINTER;
     }
 
-    int a = 0; int b = 1; int c = 1;
+    int a = 1; int b = 1; int c = 0;
     char * ptr = str;
 
     while (*ptr) {
+
         if (*ptr == '1' && *(ptr + 1) == '\0') {
             break;
         }
@@ -17,7 +18,7 @@ ReturnCode Zeckendorf(char *str, int *res) {
         a = b;
         b = c;
         if (*ptr == '1') {
-            if (*res >= INT_MAX + c) {
+            if (*res >= INT_MAX - c) {
                 return OVERFLOW;
             }
             *res += c;

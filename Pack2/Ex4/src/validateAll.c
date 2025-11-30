@@ -17,7 +17,7 @@ ReturnCode validateZeckendorf(char * str) { // в смысле валидаци�
 }
 
 bool isRoman(char c) {
-    if (c == 'I' || c == 'X' || c == 'L' || c == 'C' || c == 'D' || c == 'M') {
+    if (c == 'I' || c == 'X' || c == 'L' || c == 'C' || c == 'D' || c == 'M' || c == 'V') {
         return true;
     }
     return false;
@@ -42,6 +42,9 @@ ReturnCode validateRoman(char * str) {
 ReturnCode validateNumInBase(char * str, const int base) {
     int digit = 0;
     char * ptr = str;
+    if (str[0] == '-') {
+        ++ptr;
+    }
     while (*ptr) {
         if (!isalnum(*ptr)) {
             return INVALID_DATA;
@@ -56,6 +59,7 @@ ReturnCode validateNumInBase(char * str, const int base) {
         if (digit > base - 1) {
             return INVALID_DATA;
         }
+        ++ptr;
     }
     return OK;
 }
