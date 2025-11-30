@@ -1,6 +1,7 @@
 #include "../include/functions.h"
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 ReturnCode readChar(void * stream, char * c, bool fromString, int * chars) {
     if (!stream || !c || !fromString) {
@@ -31,6 +32,7 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
     va_list arg_copy;
     char buffer[BUFSIZ] = {0};
     char * ptrWrite = buffer;
+    char specifier[100] = {0};
 
     while (*ptr) {
 
@@ -119,7 +121,6 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
 
                *ptrWrite = '\0';
                 ptrWrite = buffer; 
-                // дальше считываем основание системы счисения
 
                 int * variable = va_arg(*args, int *);
                 int base = va_arg(*args, int);
@@ -138,7 +139,34 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
                 ++ptr;
 
             } else {
-            return READ_ERROR;
+                char specifier[32] = "%";
+                int len = 1;
+                
+                while (*ptr && strchr("diouxXeEfFgGaAcspn*", *ptr) == NULL) {
+                    if (len >= 30) break;
+                    specifier[len++] = *ptr++;
+                }
+                
+                if (*ptr && strchr("diouxXeEfFgGaAcspn*", *ptr)) {
+                    specifier[len++] = *ptr;
+                    specifier[len] = '\0';
+                    
+                    if (fromString) {
+                        char *str_stream = (char*)stream;
+                        int written = vsscanf(str_stream + chars, specifier, *args);
+                        if (written == EOF) return READ_ERROR;
+                        if (written > 0) variables += written;
+                        
+                    } else {
+                        FILE *file_stream = (FILE*)stream;
+                        int written = vfscanf(file_stream, specifier, *args);
+                        if (written == EOF) return READ_ERROR;
+                        if (written > 0) variables += written;
+ 
+                        chars += written; 
+                    }
+                    ptr++;
+                }
             }
         }
     }
