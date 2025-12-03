@@ -6,11 +6,11 @@
 
 
 typedef enum ReturnCode {
-    INVALID_DATA,
-    NULL_POINTER,
-    OVERFLOW,
-    READ_ERROR,
-    OK,
+    INVALID_DATA = -1,
+    NULL_POINTER = -2,
+    OVERFLOW = -3,
+    READ_ERROR = -4,
+    OK = 0,
 } ReturnCode;
 
 typedef enum RomanNum {

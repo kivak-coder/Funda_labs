@@ -1,13 +1,13 @@
 all: main
 
-main: main.o functions.o Roman.o toDecSys.o validateAll.o Zeckendorf.o
-	gcc -o main main.o functions.o Roman.o toDecSys.o validateAll.o Zeckendorf.o -lm
+main: main.o overscan.o Roman.o toDecSys.o validateAll.o Zeckendorf.o
+	gcc -o main main.o overscan.o Roman.o toDecSys.o validateAll.o Zeckendorf.o -lm
 
 main.o: main.c include/functions.h
 	gcc -Wall -Wextra -c main.c -I include/
 
-functions.o: src/functions.c include/functions.h
-	gcc -Wall -Wextra -c src/functions.c -I include/
+overscan.o: src/overscan.c include/functions.h
+	gcc -Wall -Wextra -c src/overscan.c -I include/
 
 Roman.o: src/Roman.c include/functions.h
 	gcc -Wall -Wextra -c src/Roman.c -I include/

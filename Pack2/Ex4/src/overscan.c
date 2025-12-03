@@ -39,11 +39,12 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
         if (*ptr != '%') {
 
             returnCode = readChar(stream, &c, fromString, &chars);
-            // printf("char: %c\n", c);
-            // printf("ptr: %c\n", *ptr);
+            printf("char: %c\n", c);
+            printf("ptr: %c\n", *ptr);
             if (returnCode != OK) {return returnCode;}
 
             if (c != *ptr) {
+                printf("HUI\n");
                 return READ_ERROR; // символы не совпали 
             } else {
                 ++ptr;
@@ -76,7 +77,7 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
                 if (returnCode != OK) {return returnCode;}
 
                 variables++;
-                ++ptr;
+                // ++ptr;
         
             } else if (*ptr == 'Z' && *(ptr + 1) == 'r') {
                 ptr += 2;
@@ -104,7 +105,7 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
                 if (returnCode != OK) {return returnCode;}
 
                 variables++;
-                ++ptr;
+                // ++ptr;
 
             } else if (*ptr == 'C' && (*(ptr + 1) == 'v' || *(ptr + 1) == 'V')) {
                 ptr += 2;
@@ -139,55 +140,86 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
                 ++ptr;
 
             } else {
-                char specifier[32] = "%";
+                specifier[0] = '%'; 
                 int len = 1;
-                
-                while (*ptr && strchr("diouxXeEfFgGaAcspn*", *ptr) == NULL) {
-                    if (len >= 30) break;
+                printf("Zaeblo\n");
+
+                while (*ptr && !strchr("diufFeEgGxXoscpaA", *ptr)) {
                     specifier[len++] = *ptr++;
-                }
-                
-                if (*ptr && strchr("diouxXeEfFgGaAcspn*", *ptr)) {
-                    specifier[len++] = *ptr;
-                    specifier[len] = '\0';
-                    
-                    if (fromString) {
-                        char *str_stream = (char*)stream;
-                        int written = vsscanf(str_stream + chars, specifier, *args);
-                        if (written == EOF) return READ_ERROR;
-                        if (written > 0) variables += written;
-                        
-                    } else {
-                        FILE *file_stream = (FILE*)stream;
-                        int written = vfscanf(file_stream, specifier, *args);
-                        if (written == EOF) return READ_ERROR;
-                        if (written > 0) variables += written;
- 
-                        chars += written; 
+                    if (len >= 40 - 1) {
+                        break; 
                     }
-                    ptr++;
                 }
+
+                char formatToMove = *ptr;
+                specifier[len] = *ptr;
+                ++ptr;
+                specifier[len + 1] = '\0';
+                int scanned = 0;
+            
+                if (!fromString) {
+                    scanned = vfscanf((FILE*)stream, buffer, *args);
+                    if (scanned <= 0) {
+                        return READ_ERROR;
+                    }
+                } else {
+                    scanned = vsscanf((const char*)stream, buffer, *args);
+                    if (scanned <= 0) {
+                        return READ_ERROR;
+                    }
+                }
+
+                while (c != *ptr && c != '\0') {
+                    returnCode = readChar(stream, &c, fromString, &chars);
+                    printf("CCC: %c", c);
+                    if (returnCode != OK) {return returnCode;}
+                }
+
+                variables += scanned;
+                switch (formatToMove) {
+                    case 'd': case 'i': case 'u': case 'x': case 'X': case 'o':
+                        va_arg(*args, int*);
+                        break;
+                    case 'f': case 'F': case 'e': case 'E': case 'g': case 'G': case 'a': case 'A':
+                        va_arg(*args, double*);
+                        break;
+                    case 'c':
+                        va_arg(*args, int*); 
+                        break;
+                    case 's':
+                        va_arg(*args, char*); 
+                        break;
+                    case 'p':
+                        va_arg(*args, void**);
+                        break;
+                    case 'n':
+                        va_arg(*args, int*);
+                        break;
+                    default:
+                        break;
+                }   
             }
         }
+        ptr++;
     }
     return variables;
 }
 
 
 int overfscanf(FILE * file, const char * format, ...) {
-    int chars = 0;
+    int variables = 0;
     va_list args;
     va_start(args, format);
-    chars = scan(file, format, &args, false);
+    variables = scan(file, format, &args, false);
     va_end(args);
-    return chars;
+    return variables;
 }
 
 int oversscanf(char * string, const char * format, ...) {
-    int chars = 0;
+    int variables = 0;
     va_list args;
     va_start(args, format);
-    chars = scan(string, format, &args, true);
+    variables = scan(string, format, &args, true);
     va_end(args);
-    return chars;
+    return variables;
 }
