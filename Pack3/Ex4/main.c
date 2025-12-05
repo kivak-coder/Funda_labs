@@ -50,8 +50,6 @@ int main() {
                 result = popHeap(&heap);
                 if (result != -1) {
                     printf("Извлечен элемент: %d\n", result);
-                } else {
-                    printf("Куча пуста\n");
                 }
                 break;
             }
@@ -60,15 +58,13 @@ int main() {
                 result = peekHeap(&heap);
                 if (result != -1) {
                     printf("Верхний элемент: %d\n", result);
-                } else {
-                    printf("Куча пуста\n");
-                }
+                } 
                 break;
             }
             
             case 5: {
                 result = isEmptyHeap(&heap);
-                if (result == 1) {
+                if (result) {
                     printf("Куча пуста\n");
                 } else if (result == 0) {
                     printf("Куча не пуста\n");

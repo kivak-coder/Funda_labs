@@ -34,7 +34,10 @@ int isEmptyHeap(const Heap *heap) {
         return -1;
     }
 
-    return (heap->size > 0) ? 0 : 1; 
+    if (heap->size > 0) {
+        return 0;
+    }
+    return 1;
 }
 
 size_t sizeHeap(const Heap *heap) {
