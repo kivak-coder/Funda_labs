@@ -4,7 +4,7 @@
 #include <string.h>
 
 ReturnCode readChar(void * stream, char * c, bool fromString, int * chars) {
-    if (!stream || !c || !fromString) {
+    if (!stream || !c) {
         return NULL_POINTER;
     }
 
@@ -34,8 +34,9 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
     char * ptrWrite = buffer;
     char specifier[100] = {0};
 
-    while (*ptr) {
 
+    while (*ptr) {
+        printf("ptr: %c\n", *ptr);
         if (*ptr != '%') {
 
             returnCode = readChar(stream, &c, fromString, &chars);
@@ -51,12 +52,11 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
             }
 
         } else { 
-            ++ptr;  // пропускаем процентик                    
-
+            ++ptr;  
             if (*ptr == 'R' && *(ptr + 1) == 'o') {
 
                 ptr += 2;
-                returnCode = readChar(stream, &c, fromString, &chars); // он не меняет чарс если чо (уже меняет)
+                returnCode = readChar(stream, &c, fromString, &chars); 
                 if (returnCode != OK) {return returnCode;}
 
                 while (*ptr != c && c != '\0') {
@@ -77,12 +77,11 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
                 if (returnCode != OK) {return returnCode;}
 
                 variables++;
-                // ++ptr;
+
         
             } else if (*ptr == 'Z' && *(ptr + 1) == 'r') {
                 ptr += 2;
-                returnCode = readChar(stream, &c, fromString, &chars); // он меняет чарс если чо 
-
+                returnCode = readChar(stream, &c, fromString, &chars); 
                 if (returnCode != OK) {return returnCode;}
 
                 while (*ptr != c && c != '\0') {
@@ -93,7 +92,6 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
                 }
 
                *ptrWrite = '\0';
-                printf("%s\n", buffer);
                 ptrWrite = buffer;
 
                 returnCode = validateZeckendorf(buffer); 
@@ -101,16 +99,13 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
 
                 int * variable = va_arg(*args, int *);
                 returnCode = Zeckendorf(buffer, variable); 
-                printf("%i\n", *variable);
                 if (returnCode != OK) {return returnCode;}
 
                 variables++;
-                // ++ptr;
 
             } else if (*ptr == 'C' && (*(ptr + 1) == 'v' || *(ptr + 1) == 'V')) {
                 ptr += 2;
-                returnCode = readChar(stream, &c, fromString, &chars); // он меняет чарс если чо 
-
+                returnCode = readChar(stream, &c, fromString, &chars); 
                 if (returnCode != OK) {return returnCode;}
 
                 while (*ptr != c && c != '\0') {
@@ -137,70 +132,46 @@ ReturnCode scan(void * stream, const char * format, va_list * args, bool fromStr
                 if (returnCode != OK) {return returnCode;}
 
                 variables++;
-                ++ptr;
 
             } else {
-                specifier[0] = '%'; 
+                printf("ptr:%c\n", *ptr);
+                char specifier[40] = {'%'};
                 int len = 1;
-                printf("Zaeblo\n");
-
+                
                 while (*ptr && !strchr("diufFeEgGxXoscpaA", *ptr)) {
                     specifier[len++] = *ptr++;
-                    if (len >= 40 - 1) {
-                        break; 
-                    }
+                    if (len >= 38) break;
                 }
-
-                char formatToMove = *ptr;
-                specifier[len] = *ptr;
+                
+                if (!*ptr) return INVALID_DATA; 
+                
+                specifier[len++] = *ptr;
+                specifier[len] = '\0';
+                
                 ++ptr;
-                specifier[len + 1] = '\0';
+                
+                va_list args_copy;
+                va_copy(args_copy, *args);
+                
                 int scanned = 0;
-            
                 if (!fromString) {
-                    scanned = vfscanf((FILE*)stream, buffer, *args);
-                    if (scanned <= 0) {
-                        return READ_ERROR;
-                    }
+                    scanned = vfscanf((FILE*)stream, specifier, args_copy);
                 } else {
-                    scanned = vsscanf((const char*)stream, buffer, *args);
-                    if (scanned <= 0) {
-                        return READ_ERROR;
-                    }
                 }
-
-                while (c != *ptr && c != '\0') {
-                    returnCode = readChar(stream, &c, fromString, &chars);
-                    printf("CCC: %c", c);
-                    if (returnCode != OK) {return returnCode;}
+                va_end(args_copy);
+                
+                if (scanned <= 0) {
+                    printf("A tut\n");
+                    return READ_ERROR;
+                } 
+                for (int i = 0; i < scanned; i++) {
+                    va_arg(*args, void*);
                 }
-
+                
                 variables += scanned;
-                switch (formatToMove) {
-                    case 'd': case 'i': case 'u': case 'x': case 'X': case 'o':
-                        va_arg(*args, int*);
-                        break;
-                    case 'f': case 'F': case 'e': case 'E': case 'g': case 'G': case 'a': case 'A':
-                        va_arg(*args, double*);
-                        break;
-                    case 'c':
-                        va_arg(*args, int*); 
-                        break;
-                    case 's':
-                        va_arg(*args, char*); 
-                        break;
-                    case 'p':
-                        va_arg(*args, void**);
-                        break;
-                    case 'n':
-                        va_arg(*args, int*);
-                        break;
-                    default:
-                        break;
-                }   
             }
         }
-        ptr++;
+        ++ptr;
     }
     return variables;
 }
